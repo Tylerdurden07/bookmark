@@ -53,8 +53,18 @@ app.get("/GetFolders", function(req, res) {
 app.post('/PostFolder', function(req, res) {
   //  var folderName =JSON.parse( req.body.folderJson);
   //  res.send(JSON.stringify(folderName) );
-
-    res.send(JSON.stringify(req.body.folder));
+    var folderParam=req.body.folder;
+    //Lets create a new user
+    var folderObj = new Folder({name: folderParam.name,bookmarks:folderParam.bookmarks});
+    //save it
+    folderObj.save(function (err, folder) {
+    if (err) {
+    console.log(err);
+    } else {
+    console.log('saved successfully:', folder);
+    }
+    });
+    res.send(JSON.stringify(folder));
 });
 
 
