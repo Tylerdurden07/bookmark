@@ -53,7 +53,7 @@ app.post('/PostFolder', function(req, res) {
     var folderName = req.body.name;
 
 
-    res.json({folderName:folderName});
+    res.send({folderName:folderName});
 });
 
 
