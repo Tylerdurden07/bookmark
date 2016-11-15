@@ -62,9 +62,10 @@ app.post('/PostFolder', function(req, res) {
     console.log(err);
     } else {
     console.log('saved successfully:', folder);
+        res.send(JSON.stringify(folder));
     }
     });
-    res.send(JSON.stringify(folder));
+
 });
 
 
