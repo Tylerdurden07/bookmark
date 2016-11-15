@@ -51,10 +51,8 @@ app.get("/GetFolders", function(req, res) {
 });
 
 app.post('/PostFolder', function(req, res) {
-    var folderName = req.body.name;
-
-
-    res.send(folderName);
+    var folderName =JSON.parse( req.body.folderJson);
+    res.send(JSON.stringify(folderName) );
 });
 
 
