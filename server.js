@@ -41,8 +41,18 @@ function handleError(res, reason, message, code) {
 
 
 app.get("/GetFolders", function(req, res) {
-    var someObj={ name:"name"};
-    res.json(someObj);
+    // Find all data in the folders collection
+    Folder.find(function (err, folders) {
+    if (err) return console.error(err);
+    console.log(folders);
+    res.json(folders);
+});
+
+app.post('/PostFolder', function(req, res) {
+    var folderName = req.body.name;
+
+
+    res.json(folderName);
 });
 
 
