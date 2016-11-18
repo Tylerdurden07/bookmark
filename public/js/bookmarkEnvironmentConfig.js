@@ -6,7 +6,7 @@ bookMArkApp.config(function(envServiceProvider){
         },
         vars:{
             development:{
-            RESTApiUrl:'http://localhost:8080'
+            RESTApiUrl:'https://desolate-taiga-92639.herokuapp.com'//http://localhost:8080'
             }
         }
     });
