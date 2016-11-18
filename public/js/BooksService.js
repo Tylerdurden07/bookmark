@@ -109,6 +109,22 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout','$rootScope','env
           return status_deferred.promise;
     };
 
+    var _deleteBookMark=function(folderId,bookMarkId,folderIndex,bookMarkIndex){
+
+        var status_deferred = $q.defer();
+        var postUrl=RESTApiBaseUrl+'/DeleteBookMarkFromFolder';
+        var postObj={ folderUpdate: { folderId:folderId,bookMarkId:bookMarkId }};
+        $http.post(postUrl,postObj)
+        .success(function(successFolder){
+            console.log("bookmark deleted success"+successFolder);
+        status_deferred.resolve(successFolder);
+        }).error(function(errdata, status, header, config){
+            console.log("error deleting bookmark");
+            status_deferred.reject(errdata);
+        });
+          return status_deferred.promise;
+    }
+
     function updateAvailableFolders() {
         if ($rootScope.UserFolders.length > 0) {
             $rootScope.availableFolder = Enumerable.From($rootScope.UserFolders)
@@ -131,6 +147,9 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout','$rootScope','env
     booksFactory.SaveBookMark = _saveBookMark;
     booksFactory.DeleteFolder=_deleteFolder;
     booksFactory.UpdateFolderBookMarks=_updateFolderBookMarks;
+    booksFactory.DeleteBookMark=_deleteBookMark;
+    booksFactory.UpdateRootFolder=UpdateRootFolder;
+    booksFactory.updateAvailableFolders=updateAvailableFolders;
 
 
 

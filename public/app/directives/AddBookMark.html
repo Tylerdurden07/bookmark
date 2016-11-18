@@ -1,26 +1,27 @@
 <h1>Add New</h1>
-<div class="input-group">
+<form name="bookMarkForm" ng-submit="addBookMark('/',bookMarkForm.$valid)" novalidate>
+<div class="form-group input-group">
     <span class="input-group-addon" id="basic-addon1">Bookmark Name</span>
-    <input type="text" class="form-control" ng-model="newBookMarkName" placeholder="Articles,News .." aria-describedby="basic-addon1">
+    <input type="text" class="form-control" ng-model="newBookMarkName" placeholder="Articles,News .." aria-describedby="basic-addon1" ng-required="true">
 </div>
 <br>
-<div class="input-group">
+<div class="form-group input-group ">
     <span class="input-group-addon" id="basic-addon2">url</span>
-    <input type="text" class="form-control" ng-model="newBookMarkUrl" placeholder="www.example.com" aria-describedby="basic-addon2">
+    <input type="text" class="form-control" ng-model="newBookMarkUrl" placeholder="www.example.com" aria-describedby="basic-addon2" ng-required="true">
 
 </div>
 <br>
 
-<label class="custom-control custom-checkbox">
+<label class="form-group custom-control custom-checkbox">
     <input type="checkbox" ng-model="includeinFolder" class="custom-control-input">
     <span class="custom-control-indicator"></span>
     <span class="custom-control-description">add this under a folder</span>
 </label>
 
-<div class="input-group" ng-show="includeinFolder">
+<div class="form-group input-group" ng-show="includeinFolder">
     <span class="input-group-addon" id="basic-addon2">Folders</span>
     <select class="form-control" id="sel1" ng-options="folder.id as folder.folderName for folder in availableFolder | filter: {folderName:'!ROOTFOLDER'}"
-            ng-disabled="disableFolderDropDown" ng-model="newBookMarkFolder"></select>
+            ng-disabled="disableFolderDropDown" ng-model="newBookMarkFolder" ng-required="includeinFolder"></select>
     <span class="input-group-btn">
         <button type="button" class="btn btn-default btn-sm" ng-click="NavigateTo('/createFolder/false/null')">
             <span class="glyphicon glyphicon-plus"></span> Add New
@@ -30,7 +31,9 @@
 
 <br />
 
-<div class="input-group" style="padding-left:41%">
-    <button type="button" class="btn btn-default" ng-click="addBookMark('/')">Save Bookmark</button>
+<div class="form-group input-group" style="padding-left:41%">
+    <button type="submit" class="btn btn-default"
+            >Save Bookmark</button>
 
 </div>
+</form>

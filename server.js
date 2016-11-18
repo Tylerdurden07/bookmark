@@ -22,7 +22,12 @@ mongoose.connect(mangoDb, function(err) {
 });
 
 // Create a model based on the schema
-var Folder = mongoose.model('Folder', { name: String, userName:String, bookMarks: Array});
+var bookMarkSchema = new mongoose.Schema({ name: 'string',url:'string' });
+
+var folderSchema = new mongoose.Schema({ name:'string',userName:'string',bookMarks:[bookMarkSchema]});
+
+
+var Folder = mongoose.model('Folder', folderSchema);
 
 mongoose.connection.on('connected', function(){
 
@@ -92,7 +97,7 @@ app.post('/DeleteFolder',function(req,res){
 
 app.post('/UpdateFolderBookMark',function(req,res){
     var folderUpdateObj=req.body.folderUpdate;
-    console.log(folderUpdateObj.newBookMark);
+
     Folder.findByIdAndUpdate(folderUpdateObj.folderId, {$push: {'bookMarks':folderUpdateObj.newBookMark}},{ 'new': true},function(err,folder){
 
         if(err){
@@ -101,7 +106,39 @@ app.post('/UpdateFolderBookMark',function(req,res){
             console.log("folder updated !"+folder);
             res.json(folder);
         }
-    })
+    });
+
+});
+
+app.post('/DeleteBookMarkFromFolder',function(req,res){
+
+    var folderUpdateObj=req.body.folderUpdate;
+
+    Folder.findByIdAndUpdate(folderUpdateObj.folderId, {$pull: {'bookMarks':{_id:folderUpdateObj.bookMarkId}}},{ 'new': true},function(err,folder){
+
+        if(err){
+            console.log("error in updating folder"+err);
+        } else {
+            console.log("folder updated !"+folder);
+            res.json(folder);
+        }
+    });
+
+});
+
+app.post('/EditFolder',function(req,res){
+
+    var folderUpdateObj=req.body.folderUpdate;
+
+    Folder.findByIdAndUpdate(folderUpdateObj.folderId, {$pull: {'bookMarks':{_id:folderUpdateObj.bookMarkId}}},{ 'new': true},function(err,folder){
+
+        if(err){
+            console.log("error in updating folder"+err);
+        } else {
+            console.log("folder updated !"+folder);
+            res.json(folder);
+        }
+    });
 
 });
 
