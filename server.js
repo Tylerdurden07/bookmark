@@ -12,7 +12,9 @@ app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-mongoose.connect(process.env.MONGODB_URI, function(err) {
+var mangoDb=process.env.MONGODB_URI||'mongodb://localhost/BookMarkApp';
+
+mongoose.connect(mangoDb, function(err) {
   if (err) {
     console.log(err);
     process.exit(1);
