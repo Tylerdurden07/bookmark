@@ -22,7 +22,7 @@ mongoose.connect(mangoDb, function(err) {
 });
 
 // Create a model based on the schema
-var Folder = mongoose.model('Folder', {name: String,bookmarks: Array});
+var Folder = mongoose.model('Folder', { name: String, userName:String, bookMarks: Array});
 
 mongoose.connection.on('connected', function(){
 
@@ -44,20 +44,24 @@ function handleError(res, reason, message, code) {
 
 
 app.get("/GetFolders", function(req, res) {
-    // Find all data in the folders collection
-    Folder.find(function (err, folders) {
-    if (err) return console.error(err);
-    console.log(folders);
-    res.json(folders);
-});
+
+    var userName=req.query.userName;
+    // Find all folders associated with this user.
+    Folder.find({ userName:userName  }, function(err, folders) {
+        if(err){
+            throw err;
+        } else{
+        res.json(folders);
+        }
+    });
+
 });
 
 app.post('/PostFolder', function(req, res) {
-  //  var folderName =JSON.parse( req.body.folderJson);
-  //  res.send(JSON.stringify(folderName) );
+
     var folderParam=req.body.folder;
-    //Lets create a new user
-    var folderObj = new Folder({name: folderParam.name,bookmarks:folderParam.bookmarks});
+    //Lets create a new folder
+    var folderObj = new Folder({name: folderParam.name,bookMarks:folderParam.bookMarks,userName:folderParam.userName});
     //save it
     folderObj.save(function (err, folder) {
     if (err) {
@@ -67,6 +71,37 @@ app.post('/PostFolder', function(req, res) {
         res.send(JSON.stringify(folder));
     }
     });
+
+});
+
+
+app.post('/DeleteFolder',function(req,res){
+
+    var folderId=req.body.folderId;
+
+    Folder.findByIdAndRemove(folderId,function(err,folder){
+        if(err){
+            console.log(err);
+        } else {
+            res.json(folder);
+            console.log("deleted folder.."+folder);
+        }
+    });
+
+});
+
+app.post('/UpdateFolderBookMark',function(req,res){
+    var folderUpdateObj=req.body.folderUpdate;
+    console.log(folderUpdateObj.newBookMark);
+    Folder.findByIdAndUpdate(folderUpdateObj.folderId, {$push: {'bookMarks':folderUpdateObj.newBookMark}},{ 'new': true},function(err,folder){
+
+        if(err){
+            console.log("error in updating folder"+err);
+        } else {
+            console.log("folder updated !"+folder);
+            res.json(folder);
+        }
+    })
 
 });
 

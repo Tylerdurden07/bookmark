@@ -33,7 +33,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
     <script src="vendor/angular/angular-route.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/ngstorage/0.3.6/ngStorage.min.js"></script>
+    <script src="vendor/angular/angular-environment.js"></script>
+
     <script src="js/bookmarkApp.js"></script>
+    <script src="js/bookmarkEnvironmentConfig.js"></script>
     <script src="js/BooksService.js"></script>
 
 </head>
@@ -59,17 +62,17 @@
             <div class="row"  >
                 <div class="col-lg-6 col-md-6" ng-controller="MyBookmarkController" style="padding-right:20px; border-right: 1px solid #000;">
                     <h1>My BookMarks</h1>
-                    <div class="panel-group" ng-repeat="folder in userFolders" ng-hide="folder.name=='ROOTFOLDER'">
+                    <div class="panel-group" ng-repeat="folder in UserFolders" ng-hide="folder.name=='ROOTFOLDER'">
                         <div class="panel panel-default" style="text-align: left;">
                             <div class="panel-heading" style="height: 31px;">
                                 <h4 class="panel-title">
                                     <a data-toggle="collapse" data-target="#{{folder.name |removeSpaces}}"><span style="padding-right:8px;" class="glyphicon glyphicon-chevron-down"></span><span style="padding-right:8px;" class="glyphicon glyphicon-folder-open"></span>{{folder.name}} </a>
                                     <p>
 
-                                        <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -28px;" ng-click="EditFolder('/editFolder/'+folder.id)">
+                                        <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -28px;" ng-click="EditFolder('/editFolder/'+folder._id)">
                                             <span class="glyphicon glyphicon-paste"></span> Edit
                                         </button>
-                                        <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -28px;" ng-really-message="Are you sure? you wanna delete this?" ng-really-click="DeleteFolder($index)" >
+                                        <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -28px;" ng-really-message="Are you sure? you wanna delete this?" ng-really-click="DeleteFolder($index,folder._id)" >
                                             <span class="glyphicon glyphicon-trash"></span>Delete
                                         </button>
                                     </p>
@@ -78,11 +81,11 @@
                             </div>
                             <div id="{{folder.name | removeSpaces}}" class="panel-collapse collapse">
                                 <ul class="list-group" style="color:black;">
-                                    <li class="list-group-item" ng-repeat="bookmark in folder.bookMarks">{{bookmark.name}} -<a  target="_blank" href="{{bookmark.value}}"> {{bookmark.value}}</a>
+                                    <li class="list-group-item" ng-repeat="bookmark in folder.bookMarks">{{bookmark.name}} -<a  target="_blank" href="{{bookmark.value}}"> {{bookmark.url}}</a>
                                         <p>
 
                                             <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;"
-                                                     ng-click="EditBookmark('/editBookMark/'+folder.id+'/'+$index+'/'+true)">
+                                                     ng-click="EditBookmark('/editBookMark/'+folder._id+'/'+$index+'/'+true)">
                                                 <span class="glyphicon glyphicon-paste"></span> Edit
                                             </button>
                                             <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;"
@@ -108,10 +111,10 @@
                             </div>-->
 
                     <ul class="list-group"  style="color:black;">
-                        <li style="text-align:left;" class="list-group-item" ng-repeat="bookmark in rootfolderItems.bookMarks">{{bookmark.name}} -<a target="_blank" href="{{bookmark.value}}"> {{bookmark.value}}</a>
+                        <li style="text-align:left;" class="list-group-item" ng-repeat="bookmark in RootFolder.bookMarks">{{bookmark.name}} -<a target="_blank" href="{{bookmark.value}}"> {{bookmark.url}}</a>
                             <p>
 
-                                <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;" ng-click="EditBookmark('/editBookMark/'+rootfolderItems.id+'/'+$index+'/'+false)">
+                                <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;" ng-click="EditBookmark('/editBookMark/'+rootfolderItems._id+'/'+$index+'/'+false)">
                                     <span class="glyphicon glyphicon-paste"></span> Edit
                                 </button>
                                 <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;"
