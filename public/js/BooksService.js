@@ -109,7 +109,28 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout','$rootScope','env
           return status_deferred.promise;
     };
 
-    var _deleteBookMark=function(folderId,bookMarkId,folderIndex,bookMarkIndex){
+        var _updateFolderName=function(folderId,folderName){
+
+        var status_deferred = $q.defer();
+         // post this folderObj to mongoDb
+        var postUrl=RESTApiBaseUrl+'/EditFolder';
+        var postObj={ folderUpdate: { folderId:folderId,folderName:folderName  }};
+        $http.post(postUrl,postObj)
+        .success(function(successFolder){
+            console.log("folder update success"+successFolder);
+            Enumerable.From($rootScope.UserFolders)
+            .Where(function (x) { return x._id ==successFolder._id }).FirstOrDefault().name=successFolder.name;
+            updateAvailableFolders();
+
+        status_deferred.resolve(successFolder);
+        }).error(function(errdata, status, header, config){
+            console.log("error deleting folder");
+            status_deferred.reject(errdata);
+        });
+          return status_deferred.promise;
+    };
+
+    var _deleteBookMark=function(folderId,bookMarkId){
 
         var status_deferred = $q.defer();
         var postUrl=RESTApiBaseUrl+'/DeleteBookMarkFromFolder';
@@ -150,6 +171,7 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout','$rootScope','env
     booksFactory.DeleteBookMark=_deleteBookMark;
     booksFactory.UpdateRootFolder=UpdateRootFolder;
     booksFactory.updateAvailableFolders=updateAvailableFolders;
+    booksFactory.UpdateFolderName=_updateFolderName;
 
 
 

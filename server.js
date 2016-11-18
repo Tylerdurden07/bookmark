@@ -130,7 +130,7 @@ app.post('/EditFolder',function(req,res){
 
     var folderUpdateObj=req.body.folderUpdate;
 
-    Folder.findByIdAndUpdate(folderUpdateObj.folderId, {$pull: {'bookMarks':{_id:folderUpdateObj.bookMarkId}}},{ 'new': true},function(err,folder){
+    Folder.findByIdAndUpdate(folderUpdateObj.folderId, { name :folderUpdateObj.folderName},{ 'new': true},function(err,folder){
 
         if(err){
             console.log("error in updating folder"+err);

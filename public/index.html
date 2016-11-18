@@ -102,19 +102,13 @@
                     </div>
 
 
-                     <!--<div class="panel-collapse collapse">
-                                <ul class="list-group" style="color:black;">
-                                    <li class="list-group-item" ng-repeat="bookmark in rootfolderItems.bookMarks">{{bookmark.name}} -<a  target="_blank" href="{{bookmark.value}}"> {{bookmark.value}}</a></li>
 
-                                </ul>
-
-                            </div>-->
 
                     <ul class="list-group"  style="color:black;">
                         <li style="text-align:left;" class="list-group-item" ng-repeat="bookmark in RootFolder.bookMarks">{{bookmark.name}} -<a target="_blank" href="{{bookmark.value}}"> {{bookmark.url}}</a>
                             <p>
 
-                                <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;" ng-click="EditBookmark('/editBookMark/'+rootfolderItems._id+'/'+$index+'/'+false)">
+                                <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;" ng-click="EditBookmark('/editBookMark/'+RootFolder._id+'/'+$index+'/'+false)">
                                     <span class="glyphicon glyphicon-paste"></span> Edit
                                 </button>
                                 <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;"
