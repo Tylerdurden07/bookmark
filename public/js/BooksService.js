@@ -24,6 +24,7 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout','$rootScope','env
                     .Select(function (x) { return { 'folderName': x['name'], 'id': x['_id'] }; })
                     .ToArray();
             }
+
             status_deferred.resolve();
             }).error(function (errdata, status, header, config) {
                 //requestData call failed, pass additional data with the reject call if needed
