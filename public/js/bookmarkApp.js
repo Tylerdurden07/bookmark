@@ -8,7 +8,7 @@
     return -1;
     }
 
-    var ngToasterTimeOut=1000;
+    var ngToasterTimeOut=2000;
     var ROOTFOLDERSIGN='ROOTFOLDER#';
 
 
