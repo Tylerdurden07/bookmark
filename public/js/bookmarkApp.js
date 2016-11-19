@@ -9,6 +9,7 @@
     }
 
     var ngToasterTimeOut=1000;
+    var ROOTFOLDERSIGN='ROOTFOLDER#';
 
 
     var bookMArkApp = angular.module('bookmark', ['ngRoute', 'ngStorage','environment','ngToast']);
@@ -115,7 +116,7 @@
                 .Where(function (x) { return x._id ==sucFolder._id }).FirstOrDefault().bookMarks=sucFolder.bookMarks;
                 booksfactory.UpdateRootFolder();
                 // check if the folder is ROOT and it has 0 bookmarks
-                if(sucFolder.name=='ROOTFOLDER'&& sucFolder.bookMarks.length==0){
+                if(sucFolder.name==ROOTFOLDERSIGN&& sucFolder.bookMarks.length==0){
                     // issue a delete folder request fo this ROOT folder
                    var _folderIndex= $rootScope.UserFolders.indexOfRootFolder(sucFolder._id);
 
@@ -156,7 +157,7 @@
 
             function init(){
                     // populate folder drop down if any
-       var availableFolderOptions= Enumerable.From($rootScope.UserFolders).Where(function (x) { return x.name != 'ROOTFOLDER' }).ToArray();
+       var availableFolderOptions= Enumerable.From($rootScope.UserFolders).Where(function (x) { return x.name != ROOTFOLDERSIGN }).ToArray();
 
         if (availableFolderOptions.length > 0) {
             $scope.disableFolderDropDown = false;
@@ -212,7 +213,7 @@
                 });
                 } else {
                     //create this bookmark by creating new root folder
-                    var newRootFolder={ name:'ROOTFOLDER',bookMarks:[],userName:userName};
+                    var newRootFolder={ name:ROOTFOLDERSIGN,bookMarks:[],userName:userName};
                     newRootFolder.bookMarks.push(newBookMarkObj);
                     booksfactory.SaveUserFolderCreation(newRootFolder).then(
                     function(){
@@ -348,7 +349,7 @@
         $scope.editBookMarkUrl = $scope.EditableBmFolderName.bookMarks[$routeParams.bookMarkIndex].url;
         $scope.editIncludeinFolder = ($routeParams.includeInFolder === 'true');
         $scope.availableFolder =  Enumerable.From($rootScope.UserFolders)
-                 .Where(function(x){ return x.name!='ROOTFOLDER'})
+                 .Where(function(x){ return x.name!=ROOTFOLDERSIGN})
                  .ToArray();
 
 
@@ -409,7 +410,7 @@
 
 
                 // for root folder deletion incase if it has 0 bookmarks
-               var rootFldr= Enumerable.From($rootScope.UserFolders).Where(function(x){ return x.name=='ROOTFOLDER'})
+               var rootFldr= Enumerable.From($rootScope.UserFolders).Where(function(x){ return x.name==ROOTFOLDERSIGN})
                 .FirstOrDefault();
                 if(rootFldr!=undefined&& Object.keys(rootFldr).length){
                     if(rootFldr._id==$routeParams.folderid&&rootFldr.bookMarks.length==0){
@@ -430,7 +431,7 @@
                 var newBookMarkObj={ name:$scope.editBookMarkName,url:$scope.editBookMarkUrl }
                 if(insertInRoot){
                     //create this bookmark by creating new root folder
-                    var newRootFolder={ name:'ROOTFOLDER',bookMarks:[],userName:userName};
+                    var newRootFolder={ name:ROOTFOLDERSIGN,bookMarks:[],userName:userName};
                     newRootFolder.bookMarks.push(newBookMarkObj);
                     booksfactory.SaveUserFolderCreation(newRootFolder).then(
                     function(){

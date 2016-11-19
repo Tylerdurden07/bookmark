@@ -15,7 +15,7 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout','$rootScope','env
             success(function (data, status, headers, config) {
             $rootScope.UserFolders=data;
 
-             $rootScope.RootFolder = Enumerable.From($rootScope.UserFolders).Where(function (x) { return x.name == 'ROOTFOLDER' }).FirstOrDefault();
+             $rootScope.RootFolder = Enumerable.From($rootScope.UserFolders).Where(function (x) { return x.name == ROOTFOLDERSIGN }).FirstOrDefault();
             if($rootScope.RootFolder==undefined){
             $rootScope.RootFolder={};
             }
@@ -146,7 +146,7 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout','$rootScope','env
     }
 
     function UpdateRootFolder(){
-        $rootScope.RootFolder = Enumerable.From($rootScope.UserFolders).Where(function (x) { return x.name == 'ROOTFOLDER' }).FirstOrDefault();
+        $rootScope.RootFolder = Enumerable.From($rootScope.UserFolders).Where(function (x) { return x.name == ROOTFOLDERSIGN}).FirstOrDefault();
             if($rootScope.RootFolder==undefined){
             $rootScope.RootFolder={};
             }
