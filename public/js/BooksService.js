@@ -57,11 +57,7 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout','$rootScope','env
          return status_deferred.promise;
     }
 
-    var _saveBookMark = function (bookmarkName, bookmarkUrl, includeUnderFolder, userName) {
 
-
-
-    }
 
     var _deleteFolder=function(folderIndex,folderId){
           var status_deferred = $q.defer();
@@ -160,7 +156,7 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout','$rootScope','env
 
     booksFactory.GetUserBookMarks = _getUserBookMarks
     booksFactory.SaveUserFolderCreation = _saveUserFolderCreation;
-    booksFactory.SaveBookMark = _saveBookMark;
+
     booksFactory.DeleteFolder=_deleteFolder;
     booksFactory.UpdateFolderBookMarks=_updateFolderBookMarks;
     booksFactory.DeleteBookMark=_deleteBookMark;

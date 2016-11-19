@@ -347,6 +347,7 @@
         $scope.editBookMarkName = $scope.EditableBmFolderName.bookMarks[$routeParams.bookMarkIndex].name;
         $scope.editBookMarkUrl = $scope.EditableBmFolderName.bookMarks[$routeParams.bookMarkIndex].url;
         $scope.editIncludeinFolder = ($routeParams.includeInFolder === 'true');
+        $scope.availableFolder = $rootScope.availableFolder;
 
          if(!$scope.editIncludeinFolder){
              // assign default folder
@@ -354,7 +355,7 @@
                  .Where(function(x){ return x.name!='ROOTFOLDER'})
                  .ToArray();
              if(availableFolderOptions.length){
-                 $scope.editBookMarkFolder =Enumerable.From(availableFolderOptions)                                     .FirstOrDefault()._id;
+                 $scope.editBookMarkFolder =Enumerable.From(availableFolderOptions).FirstOrDefault()._id;
              }
              else {
                  $scope.disableFolderDropDown=true;
@@ -399,7 +400,24 @@
             booksfactory.DeleteBookMark($routeParams.folderid,bookMarkId)
                         .then(function(){
 
-                // after successful deletion do the insert operation in desired framework
+
+                // for root folder deletion incase if it has 0 bookmarks
+               var rootFldr= Enumerable.From($rootScope.UserFolders).Where(function(x){ return x.name=='ROOTFOLDER'})
+                .FirstOrDefault();
+                if(rootFldr!=undefined&& Object.keys(rootFldr).length){
+                    if(rootFldr._id==$routeParams.folderid&&rootFldr.bookMarks.length==0){
+                        // delete root folder
+                        var rootFoldrIndex=$rootScope.UserFolders.indexOfRootFolder($routeParams.folderid);
+                        booksfactory.DeleteFolder(rootFoldrIndex,$routeParams.folderid)
+                        .then(function(){
+
+                        },function(){
+
+                        });
+                    }
+                }
+
+                // after successful deletion do the insert operation in desired folder
 
                 Enumerable.From($rootScope.UserFolders)
                 .Where(function(x){ return x._id==$routeParams.folderid})
