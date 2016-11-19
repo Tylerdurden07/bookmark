@@ -8,8 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel='shortcut icon' href="img/favicon-tags.ico" type='image/x-icon'/ >
 
-    <title>BookMarks</title>
+    <title>TagIt</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -49,7 +50,7 @@
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header page-scroll">
 
-                <a class="navbar-brand" href="#page-top">Start Bookmarking</a>
+                <a class="navbar-brand" href="#page-top">TagIt <span class="glyphicon glyphicon-tags"></span></a>
             </div>
 
         </div>
@@ -59,8 +60,8 @@
     <!-- Header -->
     <header>
         <div class="container" >
-            <div class="row"  >
-                <div class="col-lg-6 col-md-6" ng-show="!doNotDisplayApp" ng-controller="MyBookmarkController" style="padding-right:20px; border-right: 1px solid #000;">
+            <div class="row" style="margin-top:-53px;"  >
+                <div class="col-lg-6 col-md-6" ng-show="!doNotDisplayApp && UserFolders.length" ng-controller="MyBookmarkController" style="padding-right:20px; border-right: 1px solid #000;">
                     <h1>My BookMarks</h1>
                     <div class="panel-group" ng-repeat="folder in UserFolders" ng-hide="folder.name=='ROOTFOLDER'">
                         <div class="panel panel-default" style="text-align: left;">
@@ -119,6 +120,10 @@
                         </li>
 
                     </ul>
+                </div>
+                <div class="col-lg-6 col-md-6" ng-show="!doNotDisplayApp && UserFolders.length==0">
+                    <h1>Start Bookmarking <span class="glyphicon glyphicon-arrow-right"</span></h1>
+                    <img src="img/60720-OAL64W-677.jpg" style="width:400px;height:400px;">
                 </div>
                 <div class="col-lg-6 col-md-6" ng-view ng-cloak>
 
