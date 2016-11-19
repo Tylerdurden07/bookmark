@@ -403,6 +403,11 @@
                         .then(function(){
 
 
+                Enumerable.From($rootScope.UserFolders)
+                .Where(function(x){ return x._id==$routeParams.folderid})
+                .FirstOrDefault().bookMarks.splice($routeParams.bookMarkIndex, 1);
+
+
                 // for root folder deletion incase if it has 0 bookmarks
                var rootFldr= Enumerable.From($rootScope.UserFolders).Where(function(x){ return x.name=='ROOTFOLDER'})
                 .FirstOrDefault();
@@ -421,9 +426,6 @@
 
                 // after successful deletion do the insert operation in desired folder
 
-                Enumerable.From($rootScope.UserFolders)
-                .Where(function(x){ return x._id==$routeParams.folderid})
-                .FirstOrDefault().bookMarks.splice($routeParams.bookMarkIndex, 1);
 
                 var newBookMarkObj={ name:$scope.editBookMarkName,url:$scope.editBookMarkUrl }
                 if(insertInRoot){
