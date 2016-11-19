@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel='shortcut icon' href="img/favicon-tags.ico" type='image/x-icon'/ >
+    <link rel='shortcut icon' href="img/favicon-tags.ico" type='image/x-icon' />
 
     <title>TagIt</title>
 
@@ -18,7 +18,7 @@
 
     <link rel="stylesheet" href="vendor/ngToast/ngToast-animations.css">
 
-   <!-- <script src="angular-animate.min.js"></script>
+    <!-- <script src="angular-animate.min.js"></script>
     <script src="angular-sanitize.min.js"></script>
     <script src="ngToast.min.js"></script>-->
 
@@ -41,6 +41,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.5.8/angular-sanitize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-animate.min.js"></script>
     <script src="vendor/ngToast/ngToast.js"></script>
     <script src="vendor/angular/angular-route.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/ngstorage/0.3.6/ngStorage.min.js"></script>
@@ -70,8 +71,8 @@
 
     <!-- Header -->
     <header>
-        <div class="container" >
-            <div class="row" style="margin-top:-53px;"  >
+        <div class="container">
+            <div class="row" style="margin-top:-53px;">
                 <div class="col-lg-6 col-md-6" ng-show="!doNotDisplayApp && UserFolders.length" ng-controller="MyBookmarkController" style="padding-right:20px; border-right: 1px solid #000;">
                     <h1>My BookMarks</h1>
                     <div class="panel-group" ng-repeat="folder in UserFolders" ng-hide="folder.name=='ROOTFOLDER#'">
@@ -93,15 +94,13 @@
                             </div>
                             <div id="{{folder.name | removeSpaces}}" class="panel-collapse collapse">
                                 <ul class="list-group" style="color:black;">
-                                    <li class="list-group-item" ng-repeat="bookmark in folder.bookMarks">{{bookmark.name}} -<a  target="_blank" href="{{bookmark.value}}"> {{bookmark.url}}</a>
+                                    <li class="list-group-item" ng-repeat="bookmark in folder.bookMarks">{{bookmark.name}} -<a target="_blank" href="{{bookmark.value}}"> {{bookmark.url}}</a>
                                         <p>
 
-                                            <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;"
-                                                     ng-click="EditBookmark('/editBookMark/'+folder._id+'/'+$index+'/'+true)">
+                                            <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;" ng-click="EditBookmark('/editBookMark/'+folder._id+'/'+$index+'/'+true)">
                                                 <span class="glyphicon glyphicon-paste"></span> Edit
                                             </button>
-                                            <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;"
-                                                      ng-really-message="Are you sure? you wanna delete this?" ng-really-click="DeleteBookMark($parent.$index,$index)">
+                                            <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;" ng-really-message="Are you sure? you wanna delete this?" ng-really-click="DeleteBookMark($parent.$index,$index)">
                                                 <span class="glyphicon glyphicon-trash"></span>Delete
                                             </button>
                                         </p>
@@ -116,15 +115,14 @@
 
 
 
-                    <ul class="list-group"  style="color:black;">
+                    <ul class="list-group" style="color:black;">
                         <li style="text-align:left;" class="list-group-item" ng-repeat="bookmark in RootFolder.bookMarks">{{bookmark.name}} -<a target="_blank" href="{{bookmark.value}}"> {{bookmark.url}}</a>
                             <p>
 
                                 <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;" ng-click="EditBookmark('/editBookMark/'+RootFolder._id+'/'+$index+'/'+false)">
                                     <span class="glyphicon glyphicon-paste"></span> Edit
                                 </button>
-                                <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;"
-                                        ng-really-message="Are you sure? you wanna delete this?" ng-really-click="DeleteRootFolderBookMark(RootFolder._id,$index)">
+                                <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;" ng-really-message="Are you sure? you wanna delete this?" ng-really-click="DeleteRootFolderBookMark(RootFolder._id,$index)">
                                     <span class="glyphicon glyphicon-trash"></span>Delete
                                 </button>
                             </p>
