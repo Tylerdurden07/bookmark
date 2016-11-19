@@ -347,15 +347,17 @@
         $scope.editBookMarkName = $scope.EditableBmFolderName.bookMarks[$routeParams.bookMarkIndex].name;
         $scope.editBookMarkUrl = $scope.EditableBmFolderName.bookMarks[$routeParams.bookMarkIndex].url;
         $scope.editIncludeinFolder = ($routeParams.includeInFolder === 'true');
-        $scope.availableFolder = $rootScope.availableFolder;
+        $scope.availableFolder =  Enumerable.From($rootScope.UserFolders)
+                 .Where(function(x){ return x.name!='ROOTFOLDER'})
+                 .ToArray();
+
+
 
          if(!$scope.editIncludeinFolder){
              // assign default folder
-           var availableFolderOptions=  Enumerable.From($rootScope.availableFolder)
-                 .Where(function(x){ return x.name!='ROOTFOLDER'})
-                 .ToArray();
-             if(availableFolderOptions.length){
-                 $scope.editBookMarkFolder =Enumerable.From(availableFolderOptions).FirstOrDefault()._id;
+
+             if($scope.availableFolder!=undefined && $scope.availableFolder.length>0){
+                 $scope.editBookMarkFolder =Enumerable.From($scope.availableFolder).FirstOrDefault()._id;
              }
              else {
                  $scope.disableFolderDropDown=true;
