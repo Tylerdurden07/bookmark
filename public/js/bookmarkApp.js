@@ -1,6 +1,13 @@
 
     var userName = prompt("enter your name?");
 
+    Array.prototype.indexOfRootFolder = function(folderId) {
+    for (var i = 0; i < this.length; i++)
+        if (this[i]._id === folderId)
+            return i;
+    return -1;
+    }
+
 
     var bookMArkApp = angular.module('bookmark', ['ngRoute', 'ngStorage','environment']);
     bookMArkApp.run(['$rootScope','booksfactory','envService','$location',function ($rootScope,booksfactory,envService,$location) {
@@ -63,9 +70,11 @@
                             .bookMarks[BookmarkIndex]._id;
 
             booksfactory.DeleteBookMark(folderId,bookMarkId)
-                        .then(function(){
+                        .then(function(successFolder){
                 $rootScope.UserFolders[folderIndex].bookMarks.splice(BookmarkIndex, 1);
+
                 $location.path('/');
+
             },function(error){
 
             });
@@ -81,9 +90,24 @@
 
             booksfactory.DeleteBookMark(folderId,bookMarkId)
                         .then(function(sucFolder){
+
                             Enumerable.From($rootScope.UserFolders)
                 .Where(function (x) { return x._id ==sucFolder._id }).FirstOrDefault().bookMarks=sucFolder.bookMarks;
                 booksfactory.UpdateRootFolder();
+                // check if the folder is ROOT and it has 0 bookmarks
+                if(sucFolder.name=='ROOTFOLDER'&& sucFolder.bookMarks.length==0){
+                    // issue a delete folder request fo this ROOT folder
+                   var _folderIndex= $rootScope.UserFolders.indexOfRootFolder(sucFolder._id);
+
+                    booksfactory.DeleteFolder(_folderIndex,sucFolder._id).then(
+                    function(deletionSuccess){
+
+                    },function(error){
+
+                    });
+                }
+
+
             },function(error){
 
             });

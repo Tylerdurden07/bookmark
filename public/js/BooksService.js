@@ -132,6 +132,7 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout','$rootScope','env
         $http.post(postUrl,postObj)
         .success(function(successFolder){
             console.log("bookmark deleted success"+successFolder);
+
         status_deferred.resolve(successFolder);
         }).error(function(errdata, status, header, config){
             console.log("error deleting bookmark");
