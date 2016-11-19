@@ -197,10 +197,12 @@
             // save this book mark under specific folder if choosed
             if(!includeInfolder){
                 // check for the rootfolder
-                var rootFolderKeys=Object.keys($rootScope.RootFolder);
-                if(rootFolderKeys.length){
+               var _rootItems= Enumerable.From($rootScope.UserFolders)
+                .Where(function(x){ return x.name==ROOTFOLDERSIGN})
+                .ToArray();
+                if(_rootItems!=undefined &&Object.keys(_rootItems).length>0){
                     //root folder already exists
-                    includeUnderFolderId=$rootScope.RootFolder._id;
+                    includeUnderFolderId=_rootItems._id;
 
 
                 booksfactory.UpdateFolderBookMarks(includeUnderFolderId,newBookMarkObj)
