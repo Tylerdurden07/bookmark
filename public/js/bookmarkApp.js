@@ -5,11 +5,13 @@ var userName = prompt("enter your name?");
 var bookMArkApp = angular.module('bookmark', ['ngRoute', 'ngStorage','environment']);
 bookMArkApp.run(['$rootScope','booksfactory','envService',function ($rootScope,booksfactory,envService) {
 
+    if(userName.length){
     booksfactory.GetUserBookMarks(userName).then(function(){
 
     },function(error){
 
     });
+    }
 
 }]);
 
