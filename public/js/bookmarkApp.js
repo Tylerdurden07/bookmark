@@ -8,8 +8,10 @@
     return -1;
     }
 
+    var ngToasterTimeOut=1000;
 
-    var bookMArkApp = angular.module('bookmark', ['ngRoute', 'ngStorage','environment']);
+
+    var bookMArkApp = angular.module('bookmark', ['ngRoute', 'ngStorage','environment','ngToast']);
     bookMArkApp.run(['$rootScope','booksfactory','envService','$location',function ($rootScope,booksfactory,envService,$location) {
 
         if(userName){
@@ -29,9 +31,7 @@
     }]);
 
 
-    bookMArkApp.controller('MyBookmarkController',['$scope','$location','$rootScope','$route','booksfactory',function($scope,$location,$rootScope,$route,booksfactory){
-
-
+    bookMArkApp.controller('MyBookmarkController',['$scope','$location','$rootScope','$route','booksfactory','ngToast',function($scope,$location,$rootScope,$route,booksfactory,ngToast){
 
 
         // extract root folder bookmarks
@@ -55,6 +55,10 @@
             // delete this folder in mongoDb
             booksfactory.DeleteFolder(folderIndex,folderId)
             .then(function(deletedFolder){
+                ngToast.create({
+            className: 'success',
+            content: deletedFolder.name+' Folder deleted Successfully!', timeout:ngToasterTimeOut
+                    });
             $location.path('/');
             $route.reload();
             },function(error){
@@ -71,6 +75,13 @@
 
             booksfactory.DeleteBookMark(folderId,bookMarkId)
                         .then(function(successFolder){
+
+                var bmName=$rootScope.UserFolders[folderIndex].bookMarks[BookmarkIndex].name;
+                  ngToast.create({
+                 className: 'success',
+                 content: bmName+' BookMark deleted Successfully!', timeout:ngToasterTimeOut
+                    });
+
                 $rootScope.UserFolders[folderIndex].bookMarks.splice(BookmarkIndex, 1);
 
                 $location.path('/');
@@ -90,6 +101,15 @@
 
             booksfactory.DeleteBookMark(folderId,bookMarkId)
                         .then(function(sucFolder){
+
+                var bmName=Enumerable.From($rootScope.UserFolders)
+            .Where(function(x){ return x._id==folderId })
+            .FirstOrDefault().bookMarks[bookmarkIndex].name;
+                     ngToast.create({
+                 className: 'success',
+                 content: bmName+' BookMark deleted Successfully!', timeout:ngToasterTimeOut
+                    });
+
 
                             Enumerable.From($rootScope.UserFolders)
                 .Where(function (x) { return x._id ==sucFolder._id }).FirstOrDefault().bookMarks=sucFolder.bookMarks;
@@ -128,7 +148,7 @@
 
     }]);
 
-    bookMArkApp.controller('AddBookMarkController', ['$scope', '$location','$rootScope', '$route','booksfactory', function ($scope, $location,$rootScope,$route,booksfactory) {
+    bookMArkApp.controller('AddBookMarkController', ['$scope', '$location','$rootScope', '$route','booksfactory','ngToast', function ($scope, $location,$rootScope,$route,booksfactory,ngToast) {
                 var unbindHandler = $rootScope.$on('init', function () {
                 init();
                 unbindHandler();
@@ -155,7 +175,7 @@
 
 
         // populate folder drop down if any
-        console.log("normal flow");
+
         init();
 
         $scope.NavigateTo = function (path) {
@@ -184,7 +204,7 @@
 
                 booksfactory.UpdateFolderBookMarks(includeUnderFolderId,newBookMarkObj)
                 .then(function(updatedFolder){
-                   // refreshUIScopes();
+                    addSuccessToaster();
                        $location.path(path);
                     $route.reload();
                 },function(error){
@@ -196,7 +216,7 @@
                     newRootFolder.bookMarks.push(newBookMarkObj);
                     booksfactory.SaveUserFolderCreation(newRootFolder).then(
                     function(){
-                      //  refreshUIScopes();
+                      addSuccessToaster();
                         $location.path(path);
                         $route.reload();
                     },function(error){
@@ -210,7 +230,7 @@
 
                 booksfactory.UpdateFolderBookMarks(includeUnderFolderId,newBookMarkObj)
                 .then(function(updatedFolder){
-                   // refreshUIScopes();
+                   addSuccessToaster();
                        $location.path(path);
                      $route.reload();
 
@@ -218,22 +238,28 @@
 
                 });
             }} else{
-                // display a toaster
+                // display a form invalid toaster
+                         ngToast.create({
+                 className: 'danger',
+                 content: 'Can not add!! invalid data!', timeout:ngToasterTimeOut
+                    });
             }
 
 
         }
 
-        function refreshUIScopes(){
-            $scope.newBookMarkName='';
-            $scope.newBookMarkUrl='';
-            $scope.includeinFolder=false;
+
+        function addSuccessToaster(){
+               ngToast.create({
+                 className: 'success',
+                 content: 'Created Successfully!', timeout:ngToasterTimeOut
+                    });
         }
 
     }]);
 
 
-    bookMArkApp.controller('AddFolderController', ['$rootScope', '$scope', '$location', '$routeParams','$localStorage', 'booksfactory', function ($rootScope,$scope, $location, $routeParams,$localStorage, booksfactory) {
+    bookMArkApp.controller('AddFolderController', ['$rootScope', '$scope', '$location', '$routeParams','$localStorage', 'booksfactory','ngToast', function ($rootScope,$scope, $location, $routeParams,$localStorage, booksfactory,ngToast) {
 
         //emoty folder object
         var emptyFolder = {
@@ -252,6 +278,10 @@
             newFolder.name = $scope.newFolderName;
             newFolder.userName = userName;
             booksfactory.SaveUserFolderCreation(newFolder).then(function(){
+                      ngToast.create({
+                 className: 'success',
+                 content: 'Created Successfully!', timeout:ngToasterTimeOut
+                    });
                         // redirect based on the source where the event triggered.
                 if($routeParams.fromEdit === 'true'){
                     $localStorage.folderCreatedBeforEdit = newFolder.id;
@@ -269,6 +299,10 @@
             });
         } else {
             //display toaster not valid
+                                 ngToast.create({
+                 className: 'danger',
+                 content: 'Can not add!! invalid data!', timeout:ngToasterTimeOut
+                    });
         }
 
         }
@@ -277,7 +311,7 @@
 
 
 
-    bookMArkApp.controller('EditFolderController', ['$scope', '$location','$rootScope', '$routeParams', 'booksfactory', function ($scope, $location,$rootScope,$routeParams, booksfactory) {
+    bookMArkApp.controller('EditFolderController', ['$scope', '$location','$rootScope', '$routeParams', 'booksfactory','ngToast', function ($scope, $location,$rootScope,$routeParams, booksfactory,ngToast) {
 
         var editableFolder=Enumerable.From($rootScope.UserFolders)
             .Where(function (x) { return x._id == $routeParams.folderid })
@@ -291,6 +325,10 @@
         $scope.editFolder = function (redirectPath) {
 
             booksfactory.UpdateFolderName(folderId,$scope.FolderNameToEdit).then(function(){
+                      ngToast.create({
+                 className: 'success',
+                 content: 'Edited Successfully!', timeout:ngToasterTimeOut
+                    });
                 $location.path(redirectPath);
             },function(error){
 
@@ -299,7 +337,8 @@
         }
     }]);
 
-    bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootScope', '$routeParams','$localStorage', 'booksfactory', function ($scope, $location, $rootScope, $routeParams,$localStorage, booksfactory) {
+
+    bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootScope', '$routeParams','$localStorage', 'booksfactory','ngToast', function ($scope, $location, $rootScope, $routeParams,$localStorage, booksfactory,ngToast) {
 
         $scope.EditableBmFolderName = Enumerable.From($rootScope.UserFolders)
             .Where(function (x) { return x._id == $routeParams.folderid })
@@ -374,6 +413,7 @@
                     booksfactory.SaveUserFolderCreation(newRootFolder).then(
                     function(){
 
+editedSuccessToaster();
                 $location.path(redirectPath);
                     },function(error){
 
@@ -384,7 +424,7 @@
 
                                 booksfactory.UpdateFolderBookMarks(destinationFolderId,newBookMarkObj)
                                     .then(function(updatedFolder){
-
+editedSuccessToaster();
                 $location.path(redirectPath);
                                 },function(error){
 
@@ -407,7 +447,10 @@
 
 
             } else {
-                alert("invalid");
+                                ngToast.create({
+                 className: 'danger',
+                 content: 'Can not add!! invalid data!', timeout:ngToasterTimeOut
+                    });
             }
 
 
@@ -416,6 +459,13 @@
 
         $scope.CreateFolderFromEdit = function (path) {
             $location.path(path + '/true/' + $routeParams.folderid + '|' + $routeParams.bookMarkIndex + '|' + $routeParams.includeInFolder);
+        }
+
+        function editedSuccessToaster(){
+                          ngToast.create({
+                 className: 'success',
+                 content: 'Edited Successfully!', timeout:ngToasterTimeOut
+                    });
         }
     }]);
 
