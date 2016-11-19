@@ -20,7 +20,7 @@
 
 <div class="form-group input-group" ng-show="editIncludeinFolder">
     <span class="input-group-addon" id="basic-addon2">Folders</span>
-    <select class="form-control" id="sel1" ng-options="folder.id as folder.folderName for folder in availableFolder | filter: {folderName:'!ROOTFOLDER'}"
+    <select class="form-control" id="sel1" ng-options="folder._id as folder.name for folder in availableFolder | filter: {folderName:'!ROOTFOLDER'}"
             ng-disabled="disableFolderDropDown" ng-model="editBookMarkFolder" ng-required="editIncludeinFolder"></select>
     <span class="input-group-btn">
         <button type="button" class="btn btn-default btn-sm" ng-click="CreateFolderFromEdit('/createFolder')">
