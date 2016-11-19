@@ -188,6 +188,7 @@
                 .then(function(updatedFolder){
                    // refreshUIScopes();
                        $location.path(path);
+                     $route.reload();
 
                 },function(error){
 
