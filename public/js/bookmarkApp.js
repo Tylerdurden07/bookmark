@@ -5,7 +5,11 @@ var userName = prompt("enter your name?");
 var bookMArkApp = angular.module('bookmark', ['ngRoute', 'ngStorage','environment']);
 bookMArkApp.run(['$rootScope','booksfactory','envService',function ($rootScope,booksfactory,envService) {
 
-    booksfactory.GetUserBookMarks(userName);
+    booksfactory.GetUserBookMarks(userName).then(function(){
+
+    },function(error){
+
+    });
 
 }]);
 
@@ -107,7 +111,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location','$rootSco
     if (availableFolderOptions.length > 0) {
         $scope.disableFolderDropDown = false;
 
-        //$scope.availableFolder = $rootScope.availableFolder;
+        $scope.availableFolder = $rootScope.availableFolder;
         $scope.newBookMarkFolder = Enumerable.From(availableFolderOptions).FirstOrDefault()._id;
         $scope.renderFolderSelect = true;
     }

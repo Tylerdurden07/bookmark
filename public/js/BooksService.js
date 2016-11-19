@@ -6,7 +6,7 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout','$rootScope','env
     $rootScope.availableFolder =[];
     $rootScope.RootFolder={};
 
-    var _getUserBookMarksFromAPI = function (userName) {
+    var _getUserBookMarks = function (userName) {
 
         var status_deferred = $q.defer();
         var requestUrl = RESTApiBaseUrl+'/GetFolders';
@@ -35,13 +35,6 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout','$rootScope','env
 
     }
 
-    var _getUserBookMarks=function(userName){
-
-        _getUserBookMarksFromAPI(userName).then(function(){
-
-        },function(){});
-        //return $rootScope.lstFolderObj;
-    }
 
     var _saveUserFolderCreation = function (folderObj) {
         var status_deferred = $q.defer();
