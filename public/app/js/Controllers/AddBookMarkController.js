@@ -1,4 +1,4 @@
-bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootScope', '$route', 'booksfactory', 'ngToast', function ($scope, $location, $rootScope, $route, booksfactory, ngToast) {
+bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootScope', '$route', 'booksfactory', 'helperFactory', function ($scope, $location, $rootScope, $route, booksfactory, helperFactory) {
 
     // incase contoller executes befor angular run.
     var unbindHandler = $rootScope.$on('init', function () {
@@ -61,7 +61,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
 
                     booksfactory.UpdateFolderBookMarks(includeUnderFolderId, newBookMarkObj)
                         .then(function (updatedFolder) {
-                            addSuccessToaster();
+                            helperFactory.Toaster('Created Successfully!','success');
                             $location.path(path);
                             $route.reload();
                         }, function (error) {
@@ -77,7 +77,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
                     newRootFolder.bookMarks.push(newBookMarkObj);
                     booksfactory.SaveUserFolderCreation(newRootFolder).then(
                         function () {
-                            addSuccessToaster();
+                            helperFactory.Toaster('Created Successfully!','success');
                             $location.path(path);
                             $route.reload();
                         },
@@ -92,7 +92,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
 
                 booksfactory.UpdateFolderBookMarks(includeUnderFolderId, newBookMarkObj)
                     .then(function (updatedFolder) {
-                        addSuccessToaster();
+                        helperFactory.Toaster('Created Successfully!','success');
                         $location.path(path);
                         $route.reload();
 
@@ -102,25 +102,10 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
             }
         } else {
             // display invalid toaster
-            ngToast.create({
-                className: 'danger',
-                content: 'Can not add!! invalid data!',
-                timeout: ngToasterTimeOut,
-                dismissButton: true
-            });
+            helperFactory.Toaster('Can not add!! invalid data!','danger');
+
         }
 
-
-    }
-
-
-    function addSuccessToaster() {
-        ngToast.create({
-            className: 'success',
-            content: 'Created Successfully!',
-            timeout: ngToasterTimeOut,
-            dismissButton: true
-        });
     }
 
     }]);

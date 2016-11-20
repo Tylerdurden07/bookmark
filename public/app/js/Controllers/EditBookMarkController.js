@@ -1,4 +1,4 @@
-bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootScope', '$routeParams', '$localStorage', 'booksfactory', 'ngToast', function ($scope, $location, $rootScope, $routeParams, $localStorage, booksfactory, ngToast) {
+bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootScope', '$routeParams', '$localStorage', 'booksfactory', 'helperFactory', function ($scope, $location, $rootScope, $routeParams, $localStorage, booksfactory, helperFactory) {
 
     $scope.EditableBmFolderName = Enumerable.From($rootScope.UserFolders)
         .Where(function (x) {
@@ -110,7 +110,7 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
                         booksfactory.SaveUserFolderCreation(newRootFolder).then(
                             function () {
 
-                                editedSuccessToaster();
+                                helperFactory.Toaster('Edited Successfully!','success');
                                 $location.path(redirectPath);
                             },
                             function (error) {
@@ -122,7 +122,8 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
 
                         booksfactory.UpdateFolderBookMarks(destinationFolderId, newBookMarkObj)
                             .then(function (updatedFolder) {
-                                editedSuccessToaster();
+                            helperFactory.Toaster('Edited Successfully!','success');
+
                                 $location.path(redirectPath);
                             }, function (error) {
 
@@ -145,12 +146,8 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
 
 
         } else {
-            ngToast.create({
-                className: 'danger',
-                content: 'Can not add!! invalid data!',
-                timeout: ngToasterTimeOut,
-                dismissButton: true
-            });
+            helperFactory.Toaster('Can not add!! invalid data!','danger');
+
         }
 
 
@@ -161,12 +158,5 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
         $location.path(path + '/true/' + $routeParams.folderid + '|' + $routeParams.bookMarkIndex + '|' + $routeParams.includeInFolder);
     }
 
-    function editedSuccessToaster() {
-        ngToast.create({
-            className: 'success',
-            content: 'Edited Successfully!',
-            timeout: ngToasterTimeOut,
-            dismissButton: true
-        });
-    }
+
     }]);

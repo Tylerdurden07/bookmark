@@ -1,4 +1,4 @@
-bookMArkApp.controller('EditFolderController', ['$scope', '$location', '$rootScope', '$routeParams', 'booksfactory', 'ngToast', function ($scope, $location, $rootScope, $routeParams, booksfactory, ngToast) {
+bookMArkApp.controller('EditFolderController', ['$scope', '$location', '$rootScope', '$routeParams', 'booksfactory', 'helperFactory', function ($scope, $location, $rootScope, $routeParams, booksfactory, helperFactory) {
 
     var editableFolder = Enumerable.From($rootScope.UserFolders)
         .Where(function (x) {
@@ -11,19 +11,18 @@ bookMArkApp.controller('EditFolderController', ['$scope', '$location', '$rootSco
 
 
 
-    $scope.editFolder = function (redirectPath) {
-
+    $scope.editFolder = function (redirectPath,isValid) {
+        if(isValid){
         booksfactory.UpdateFolderName(folderId, $scope.FolderNameToEdit).then(function () {
-            ngToast.create({
-                className: 'success',
-                content: 'Edited Successfully!',
-                timeout: ngToasterTimeOut,
-                dismissButton: true
-            });
+            helperFactory.Toaster('Edited Successfully!','success');
+
             $location.path(redirectPath);
         }, function (error) {
 
         });
+    } else {
+        helperFactory.Toaster('Can not edit folder.','danger');
+    }
 
     }
     }]);

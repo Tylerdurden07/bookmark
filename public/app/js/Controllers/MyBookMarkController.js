@@ -1,4 +1,4 @@
-bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootScope', '$route', 'booksfactory', 'ngToast', function ($scope, $location, $rootScope, $route, booksfactory, ngToast) {
+bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootScope', '$route', 'booksfactory', 'helperFactory', function ($scope, $location, $rootScope, $route, booksfactory, helperFactory) {
 
 
     // extract root folder bookmarks
@@ -22,13 +22,8 @@ bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootSco
         // delete this folder in mongoDb
         booksfactory.DeleteFolder(folderIndex, folderId)
             .then(function (deletedFolder) {
-                ngToast.create({
-                    className: 'success',
-                    content: deletedFolder.name + ' Folder deleted Successfuly!',
-                    timeout: ngToasterTimeOut,
-                    animation: 'slide',
-                    dismissButton: true
-                });
+            helperFactory.Toaster(deletedFolder.name + ' Folder deleted Successfuly!','success');
+
                 $location.path('/');
                 $route.reload();
             }, function (error) {
@@ -47,12 +42,7 @@ bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootSco
             .then(function (successFolder) {
 
                 var bmName = $rootScope.UserFolders[folderIndex].bookMarks[BookmarkIndex].name;
-                ngToast.create({
-                    className: 'success',
-                    content: bmName + ' BookMark deleted Successfully!',
-                    timeout: ngToasterTimeOut,
-                    dismissButton: true
-                });
+            helperFactory.Toaster(bmName + ' BookMark deleted Successfully!','success');
 
                 $rootScope.UserFolders[folderIndex].bookMarks.splice(BookmarkIndex, 1);
 
@@ -81,12 +71,8 @@ bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootSco
                         return x._id == folderId
                     })
                     .FirstOrDefault().bookMarks[bookmarkIndex].name;
-                ngToast.create({
-                    className: 'success',
-                    content: bmName + ' BookMark deleted Successfully!',
-                    timeout: ngToasterTimeOut,
-                    dismissButton: true
-                });
+            helperFactory.Toaster(bmName + ' BookMark deleted Successfully!','success');
+
 
 
                 Enumerable.From($rootScope.UserFolders)
@@ -116,18 +102,7 @@ bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootSco
     }
 
 
-    function updateAvailableFolders() {
-        if ($rootScope.UserFolders.length > 0) {
-            $rootScope.availableFolder = Enumerable.From($rootScope.UserFolders)
-                .Select(function (x) {
-                    return {
-                        'folderName': x['name'],
-                        'id': x['_id']
-                    };
-                })
-                .ToArray();
-        }
-    }
+
 
 
 

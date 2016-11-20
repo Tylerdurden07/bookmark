@@ -1,11 +1,14 @@
 <h1>Edit Folder</h1>
-<div class="input-group">
+<form name="editFolderForm" ng-submit="editFolder('/',editFolderForm.$valid)" novalidate>
+<div class="form-group input-group">
     <span class="input-group-addon" id="basic-addon2">Folder Name</span>
-    <input type="text" class="form-control" ng-model="FolderNameToEdit" placeholder="ex: StackOverflow, GIT , Pintrest" aria-describedby="basic-addon2">
+    <input type="text" class="form-control" ng-model="FolderNameToEdit" placeholder="ex: StackOverflow, GIT , Pintrest" aria-describedby="basic-addon2"
+           ng-pattern="/^[a-zA-Z0-9]*$/" ng-required="true">
 
 </div>
 <br />
-<div class="input-group" style="padding-left:41%">
-    <button type="button" class="btn btn-default" ng-click="editFolder('/')">Create</button>
+<div class="form-group input-group" style="padding-left:41%">
+    <button type="submit" class="btn btn-default" >Create</button>
 
 </div>
+</form>
