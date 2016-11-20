@@ -21,6 +21,7 @@ bookMArkApp.run(['$rootScope', 'booksfactory', 'envService', '$location', '$loca
     $localStorage.$reset();
 
     if (userName) {
+        $rootScope.userName=userName;
         booksfactory.GetUserBookMarks(userName).then(function () {
             $rootScope.$broadcast('init');
 

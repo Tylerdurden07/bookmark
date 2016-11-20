@@ -72,7 +72,17 @@
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header page-scroll">
 
-                <a class="navbar-brand" href="#/">TagIt <span class="glyphicon glyphicon-tags"></span></a>
+                <a class="navbar-brand" >TagIt <span class="glyphicon glyphicon-tags"></span></a>
+            </div>
+
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+
+                    <li class="page-scroll">
+                        <a ng-show="userName.length>0">Welcome {{userName}}</a>
+                    </li>
+
+                </ul>
             </div>
 
         </div>
