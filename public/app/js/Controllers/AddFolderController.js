@@ -36,7 +36,7 @@ bookMArkApp.controller('AddFolderController', ['$rootScope', '$scope', '$locatio
             });
         } else {
             //display toaster not valid
-            helperFactory.Toaster('Can not add!! invalid data!','danger');
+            helperFactory.Toaster('Can not add!! Special characters not allowed','danger');
 
         }
 

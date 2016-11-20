@@ -21,7 +21,7 @@ bookMArkApp.controller('EditFolderController', ['$scope', '$location', '$rootSco
 
         });
     } else {
-        helperFactory.Toaster('Can not edit folder.','danger');
+        helperFactory.Toaster('Can not edit!! Special characters not allowed','danger');
     }
 
     }
