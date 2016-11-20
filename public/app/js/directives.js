@@ -1,3 +1,4 @@
+// used for the confirmation box before deletion
 bookMArkApp.directive('ngReallyClick', [function () {
     return {
         restrict: 'A',

@@ -1,4 +1,6 @@
 bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootScope', '$route', 'booksfactory', 'ngToast', function ($scope, $location, $rootScope, $route, booksfactory, ngToast) {
+
+    // incase contoller executes befor angular run.
     var unbindHandler = $rootScope.$on('init', function () {
         init();
         unbindHandler();
@@ -19,12 +21,8 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
         }
     }
 
-
-    //$scope.userFolders = $rootScope.UserFolders
     //disable the folder selection if there is no folder created by the user
     $scope.disableFolderDropDown = true;
-
-
 
     // populate folder drop down if any
 
@@ -48,7 +46,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
                 name: bookmarkName,
                 url: bookmarkUrl
             };
-            // save this book mark under specific folder if choosed
+            // save this book mark under specific folder if choosen
             if (!includeInfolder) {
                 // check for the rootfolder
                 var _rootItems = Enumerable.From($rootScope.UserFolders)
@@ -103,7 +101,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
                     });
             }
         } else {
-            // display a form invalid toaster
+            // display invalid toaster
             ngToast.create({
                 className: 'danger',
                 content: 'Can not add!! invalid data!',

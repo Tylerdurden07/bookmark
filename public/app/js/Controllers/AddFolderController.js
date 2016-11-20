@@ -1,6 +1,6 @@
 bookMArkApp.controller('AddFolderController', ['$rootScope', '$scope', '$location', '$routeParams', '$localStorage', 'booksfactory', 'ngToast', function ($rootScope, $scope, $location, $routeParams, $localStorage, booksfactory, ngToast) {
 
-    //emoty folder object
+    //empty folder object
     var emptyFolder = {
         id: null,
         userName: null,

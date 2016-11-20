@@ -1,3 +1,4 @@
+//this factory interacts with the node rest api for all folder CRUD operations
 bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'envService', function ($http, $q, $timeout, $rootScope, envService) {
 
     var RESTApiBaseUrl = envService.read('RESTApiUrl');
@@ -197,7 +198,6 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
 
     booksFactory.GetUserBookMarks = _getUserBookMarks
     booksFactory.SaveUserFolderCreation = _saveUserFolderCreation;
-
     booksFactory.DeleteFolder = _deleteFolder;
     booksFactory.UpdateFolderBookMarks = _updateFolderBookMarks;
     booksFactory.DeleteBookMark = _deleteBookMark;
