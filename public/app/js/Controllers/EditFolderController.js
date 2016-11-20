@@ -11,18 +11,18 @@ bookMArkApp.controller('EditFolderController', ['$scope', '$location', '$rootSco
 
 
 
-    $scope.editFolder = function (redirectPath,isValid) {
-        if(isValid){
-        booksfactory.UpdateFolderName(folderId, $scope.FolderNameToEdit).then(function () {
-            helperFactory.Toaster('Edited Successfully!','success');
+    $scope.editFolder = function (redirectPath, isValid) {
+        if (isValid) {
+            booksfactory.UpdateFolderName(folderId, $scope.FolderNameToEdit).then(function () {
+                helperFactory.Toaster('Edited Successfully!', 'success');
 
-            $location.path(redirectPath);
-        }, function (error) {
+                $location.path(redirectPath);
+            }, function (error) {
 
-        });
-    } else {
-        helperFactory.Toaster('Can not edit!! Special characters not allowed','danger');
-    }
+            });
+        } else {
+            helperFactory.Toaster('Can not edit!! Special characters not allowed', 'danger');
+        }
 
     }
     }]);

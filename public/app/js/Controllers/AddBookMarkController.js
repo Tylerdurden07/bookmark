@@ -1,4 +1,4 @@
-bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootScope', '$route', 'booksfactory', 'helperFactory', function ($scope, $location, $rootScope, $route, booksfactory, helperFactory) {
+bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootScope', '$route', 'booksfactory', 'helperFactory', '$localStorage', function ($scope, $location, $rootScope, $route, booksfactory, helperFactory, $localStorage) {
 
     // incase contoller executes befor angular run.
     var unbindHandler = $rootScope.$on('init', function () {
@@ -19,6 +19,19 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
             $scope.newBookMarkFolder = Enumerable.From(availableFolderOptions).FirstOrDefault()._id;
             $scope.renderFolderSelect = true;
         }
+
+        var resetRequired = false;
+        if ($localStorage.dirtyBmName != undefined) {
+            $scope.newBookMarkName = $localStorage.dirtyBmName;
+            resetRequired = true;
+        }
+        if ($localStorage.dirtyBmUrl != undefined) {
+            $scope.newBookMarkUrl = $localStorage.dirtyBmUrl;
+            resetRequired = true;
+        }
+        if (resetRequired) {
+            $localStorage.$reset();
+        }
     }
 
     //disable the folder selection if there is no folder created by the user
@@ -28,7 +41,16 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
 
     init();
 
-    $scope.NavigateTo = function (path) {
+    $scope.NavigateTo = function (path, bookMarkNameDirty, bookMarkUrlDirty) {
+        //Check if the form is dirty if so save it in storage to display when use is back
+        if (bookMarkNameDirty || bookMarkUrlDirty) {
+            if (bookMarkNameDirty) {
+                $localStorage.dirtyBmName = $scope.newBookMarkName;
+            }
+            if (bookMarkUrlDirty) {
+                $localStorage.dirtyBmUrl = $scope.newBookMarkUrl;
+            }
+        }
         $location.path(path);
 
     }
@@ -61,7 +83,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
 
                     booksfactory.UpdateFolderBookMarks(includeUnderFolderId, newBookMarkObj)
                         .then(function (updatedFolder) {
-                            helperFactory.Toaster('Created Successfully!','success');
+                            helperFactory.Toaster('Created Successfully!', 'success');
                             $location.path(path);
                             $route.reload();
                         }, function (error) {
@@ -77,7 +99,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
                     newRootFolder.bookMarks.push(newBookMarkObj);
                     booksfactory.SaveUserFolderCreation(newRootFolder).then(
                         function () {
-                            helperFactory.Toaster('Created Successfully!','success');
+                            helperFactory.Toaster('Created Successfully!', 'success');
                             $location.path(path);
                             $route.reload();
                         },
@@ -92,7 +114,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
 
                 booksfactory.UpdateFolderBookMarks(includeUnderFolderId, newBookMarkObj)
                     .then(function (updatedFolder) {
-                        helperFactory.Toaster('Created Successfully!','success');
+                        helperFactory.Toaster('Created Successfully!', 'success');
                         $location.path(path);
                         $route.reload();
 
@@ -102,7 +124,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
             }
         } else {
             // display invalid toaster
-            helperFactory.Toaster('Can not add!! invalid data!','danger');
+            helperFactory.Toaster('Can not add!! invalid data!', 'danger');
 
         }
 

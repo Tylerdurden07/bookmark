@@ -2,12 +2,12 @@
 <form name="bookMarkForm" ng-submit="addBookMark('/',bookMarkForm.$valid)" novalidate>
     <div class="form-group input-group">
         <span class="input-group-addon" id="basic-addon1">Bookmark Name</span>
-        <input type="text" class="form-control" ng-model="newBookMarkName" placeholder="Articles,News .." aria-describedby="basic-addon1" ng-required="true">
+        <input type="text" class="form-control" ng-model="newBookMarkName" placeholder="Articles,News .." aria-describedby="basic-addon1" ng-required="true" name="bookmarkname">
     </div>
     <br>
     <div class="form-group input-group ">
         <span class="input-group-addon" id="basic-addon2">url</span>
-        <input type="text" class="form-control" ng-model="newBookMarkUrl" placeholder="www.example.com" aria-describedby="basic-addon2" ng-required="true">
+        <input type="text" class="form-control" ng-model="newBookMarkUrl" placeholder="www.example.com" aria-describedby="basic-addon2" ng-required="true" name="bookmarkurl">
 
     </div>
     <br>
@@ -22,7 +22,7 @@
         <span class="input-group-addon" id="basic-addon2">Folders</span>
         <select class="form-control" id="sel1" ng-options="folder.id as folder.folderName for folder in availableFolder | filter: {folderName:'!ROOTFOLDER'}" ng-disabled="disableFolderDropDown" ng-model="newBookMarkFolder" ng-required="includeinFolder"></select>
         <span class="input-group-btn">
-        <button type="button" class="btn btn-default btn-sm" ng-click="NavigateTo('/createFolder/false/null')">
+        <button type="button" class="btn btn-default btn-sm" ng-click="NavigateTo('/createFolder/false/null',bookMarkForm.bookmarkname.$dirty,bookMarkForm.bookmarkurl.$dirty)">
             <span class="glyphicon glyphicon-plus"></span> Add New
         </button>
         </span>

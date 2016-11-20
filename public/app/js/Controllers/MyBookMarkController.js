@@ -22,7 +22,7 @@ bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootSco
         // delete this folder in mongoDb
         booksfactory.DeleteFolder(folderIndex, folderId)
             .then(function (deletedFolder) {
-            helperFactory.Toaster(deletedFolder.name + ' Folder deleted Successfuly!','success');
+                helperFactory.Toaster(deletedFolder.name + ' Folder deleted Successfuly!', 'success');
 
                 $location.path('/');
                 $route.reload();
@@ -42,7 +42,7 @@ bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootSco
             .then(function (successFolder) {
 
                 var bmName = $rootScope.UserFolders[folderIndex].bookMarks[BookmarkIndex].name;
-            helperFactory.Toaster(bmName + ' BookMark deleted Successfully!','success');
+                helperFactory.Toaster(bmName + ' BookMark deleted Successfully!', 'success');
 
                 $rootScope.UserFolders[folderIndex].bookMarks.splice(BookmarkIndex, 1);
 
@@ -71,7 +71,7 @@ bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootSco
                         return x._id == folderId
                     })
                     .FirstOrDefault().bookMarks[bookmarkIndex].name;
-            helperFactory.Toaster(bmName + ' BookMark deleted Successfully!','success');
+                helperFactory.Toaster(bmName + ' BookMark deleted Successfully!', 'success');
 
 
 
@@ -108,8 +108,3 @@ bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootSco
 
 
     }]);
-
-
-
-
-

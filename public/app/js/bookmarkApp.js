@@ -17,7 +17,8 @@ var ROOTFOLDERSIGN = 'ROOTFOLDER#';
 var bookMArkApp = angular.module('bookmark', ['ngRoute', 'ngStorage', 'environment', 'ngToast', 'ngAnimate']);
 
 //Get the master data in Run method and share the data across controller , this reduces number of hits to mongoDb
-bookMArkApp.run(['$rootScope', 'booksfactory', 'envService', '$location', function ($rootScope, booksfactory, envService, $location) {
+bookMArkApp.run(['$rootScope', 'booksfactory', 'envService', '$location', '$localStorage', function ($rootScope, booksfactory, envService, $location, $localStorage) {
+    $localStorage.$reset();
 
     if (userName) {
         booksfactory.GetUserBookMarks(userName).then(function () {

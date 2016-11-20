@@ -17,7 +17,7 @@ bookMArkApp.controller('AddFolderController', ['$rootScope', '$scope', '$locatio
             newFolder.name = $scope.newFolderName;
             newFolder.userName = userName;
             booksfactory.SaveUserFolderCreation(newFolder).then(function () {
-                helperFactory.Toaster('Created Successfully!','success');
+                helperFactory.Toaster('Created Successfully!', 'success');
 
                 // redirect based on the source where the event triggered.
                 if ($routeParams.fromEdit === 'true') {
@@ -28,6 +28,7 @@ bookMArkApp.controller('AddFolderController', ['$rootScope', '$scope', '$locatio
                     var includeInFolder = redirectParams[2]
                     $location.path('/editBookMark/' + folderId + '/' + bookMarkIndex + '/' + includeInFolder);
                 } else {
+                    $localStorage.recentCreatedFolder = newFolder.id;
 
                     $location.path(path);
                 }
@@ -36,7 +37,7 @@ bookMArkApp.controller('AddFolderController', ['$rootScope', '$scope', '$locatio
             });
         } else {
             //display toaster not valid
-            helperFactory.Toaster('Can not add!! Special characters not allowed','danger');
+            helperFactory.Toaster('Can not add!! Special characters not allowed', 'danger');
 
         }
 

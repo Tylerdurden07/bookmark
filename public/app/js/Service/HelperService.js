@@ -4,7 +4,7 @@ bookMArkApp.factory('helperFactory', ['ngToast', function (ngToast) {
 
     var helperFactory = {};
 
-    var _toaster = function (contentMessage,toasterType) {
+    var _toaster = function (contentMessage, toasterType) {
         ngToast.create({
             className: toasterType,
             content: contentMessage,

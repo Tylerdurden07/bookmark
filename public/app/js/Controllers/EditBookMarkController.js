@@ -110,7 +110,7 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
                         booksfactory.SaveUserFolderCreation(newRootFolder).then(
                             function () {
 
-                                helperFactory.Toaster('Edited Successfully!','success');
+                                helperFactory.Toaster('Edited Successfully!', 'success');
                                 $location.path(redirectPath);
                             },
                             function (error) {
@@ -122,7 +122,7 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
 
                         booksfactory.UpdateFolderBookMarks(destinationFolderId, newBookMarkObj)
                             .then(function (updatedFolder) {
-                            helperFactory.Toaster('Edited Successfully!','success');
+                                helperFactory.Toaster('Edited Successfully!', 'success');
 
                                 $location.path(redirectPath);
                             }, function (error) {
@@ -146,7 +146,7 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
 
 
         } else {
-            helperFactory.Toaster('Can not add!! invalid data!','danger');
+            helperFactory.Toaster('Can not add!! invalid data!', 'danger');
 
         }
 
