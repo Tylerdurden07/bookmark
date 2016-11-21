@@ -2,7 +2,7 @@
 <form name="FolderForm" ng-submit="createFolder('/',FolderForm.$valid)" novalidate>
     <div class="form-group input-group">
         <span class="input-group-addon" id="basic-addon2">Folder Name</span>
-        <input type="text" class="form-control" ng-model="newFolderName" placeholder="ex: StackOverflow, GIT , Pintrest" aria-describedby="basic-addon2" ng-pattern="/^[a-zA-Z0-9]*$/" ng-required="true">
+        <input type="text" class="form-control" ng-model="newFolderName" placeholder="ex: StackOverflow, GIT , Pintrest" aria-describedby="basic-addon2" ng-pattern="/^[a-zA-Z0-9 ]*$/" ng-required="true">
 
     </div>
     <br/>
