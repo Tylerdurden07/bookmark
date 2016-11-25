@@ -79,57 +79,70 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
                             return x.name == ROOTFOLDERSIGN
                         })
                         .FirstOrDefault();
+
+                        function InsertInDesiredFolder(){
+                          var newBookMarkObj = {
+                              name: $scope.editBookMarkName,
+                              url: $scope.editBookMarkUrl
+                          }
+                          if (insertInRoot) {
+                              //create this bookmark by creating new root folder
+                              var newRootFolder = {
+                                  name: ROOTFOLDERSIGN,
+                                  bookMarks: [],
+                                  userName: userName
+                              };
+                              newRootFolder.bookMarks.push(newBookMarkObj);
+                              booksfactory.SaveUserFolderCreation(newRootFolder).then(
+                                  function () {
+
+                                      helperFactory.Toaster('Edited Successfully!', 'success');
+                                      $location.path(redirectPath);
+                                  },
+                                  function (error) {
+
+                                  });
+                          } else {
+
+                              // do normal bookmark insert into a folder operation
+
+                              booksfactory.UpdateFolderBookMarks(destinationFolderId, newBookMarkObj)
+                                  .then(function (updatedFolder) {
+                                      helperFactory.Toaster('Edited Successfully!', 'success');
+
+                                      $location.path(redirectPath);
+                                  }, function (error) {
+
+                                  });
+
+                          }
+                        }
                     if (rootFldr != undefined && Object.keys(rootFldr).length) {
                         if (rootFldr._id == $routeParams.folderid && rootFldr.bookMarks.length == 0) {
                             // delete root folder
                             var rootFoldrIndex = $rootScope.UserFolders.indexOfRootFolder($routeParams.folderid);
                             booksfactory.DeleteFolder(rootFoldrIndex, $routeParams.folderid)
                                 .then(function () {
+                                  insertInRoot=true;
+                                  InsertInDesiredFolder();
 
                                 }, function () {
 
                                 });
+                        } else {
+                          InsertInDesiredFolder();
                         }
                     }
 
+                    else {
+
                     // after successful deletion do the insert operation in desired folder
+                    InsertInDesiredFolder();
 
 
-                    var newBookMarkObj = {
-                        name: $scope.editBookMarkName,
-                        url: $scope.editBookMarkUrl
-                    }
-                    if (insertInRoot) {
-                        //create this bookmark by creating new root folder
-                        var newRootFolder = {
-                            name: ROOTFOLDERSIGN,
-                            bookMarks: [],
-                            userName: userName
-                        };
-                        newRootFolder.bookMarks.push(newBookMarkObj);
-                        booksfactory.SaveUserFolderCreation(newRootFolder).then(
-                            function () {
 
-                                helperFactory.Toaster('Edited Successfully!', 'success');
-                                $location.path(redirectPath);
-                            },
-                            function (error) {
 
-                            });
-                    } else {
-
-                        // do normal bookmark insert into a folder operation
-
-                        booksfactory.UpdateFolderBookMarks(destinationFolderId, newBookMarkObj)
-                            .then(function (updatedFolder) {
-                                helperFactory.Toaster('Edited Successfully!', 'success');
-
-                                $location.path(redirectPath);
-                            }, function (error) {
-
-                            });
-
-                    }
+                  }
 
 
 

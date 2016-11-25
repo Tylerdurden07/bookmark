@@ -81,12 +81,12 @@
                         <!--<a ng-show="userName.length>0">Welcome {{userName}}</a>-->
                 <ul class="nav navbar-nav navbar-right">
 
-                  
+
                     <li class="page-scroll">
-                        <a href="#portfolio">My BookMarks</a>
+                        <a href="#/">My BookMarks</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="#about">Add BookMark</a>
+                        <a href="#/addBookMark">Add BookMark</a>
                     </li>
 
 
@@ -101,68 +101,8 @@
     <header>
         <div class="container">
             <div class="row" style="margin-top:-53px;">
-                <div class="col-lg-6 col-md-6" ng-show="!doNotDisplayApp && UserFolders.length" ng-controller="MyBookmarkController" style="padding-right:20px; border-right: 1px solid #000;">
-                    <h1>My BookMarks</h1>
-                    <div class="panel-group" ng-repeat="folder in UserFolders" ng-hide="folder.name=='ROOTFOLDER#'">
-                        <div class="panel panel-default" style="text-align: left;">
-                            <div class="panel-heading" style="height: 31px;">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-target="#{{folder.name |removeSpaces}}"><span style="padding-right:8px;" class="glyphicon glyphicon-chevron-down"></span><span style="padding-right:8px;" class="glyphicon glyphicon-folder-open"></span>{{folder.name}} </a>
-                                    <p>
 
-                                        <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -28px;" ng-click="EditFolder('/editFolder/'+folder._id)">
-                                            <span class="glyphicon glyphicon-paste"></span> Edit
-                                        </button>
-                                        <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -28px;" ng-really-message="Are you sure? you wanna delete this?" ng-really-click="DeleteFolder($index,folder._id)" >
-                                            <span class="glyphicon glyphicon-trash"></span>Delete
-                                        </button>
-                                    </p>
-                                </h4>
-
-                            </div>
-                            <div id="{{folder.name | removeSpaces}}" class="panel-collapse collapse">
-                                <ul class="list-group" style="color:black;">
-                                    <li class="list-group-item" ng-repeat="bookmark in folder.bookMarks">{{bookmark.name}} -<a target="_blank" href="{{bookmark.value}}"> {{bookmark.url}}</a>
-                                        <p>
-
-                                            <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;" ng-click="EditBookmark('/editBookMark/'+folder._id+'/'+$index+'/'+true)">
-                                                <span class="glyphicon glyphicon-paste"></span> Edit
-                                            </button>
-                                            <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;" ng-really-message="Are you sure? you wanna delete this?" ng-really-click="DeleteBookMark($parent.$index,$index)">
-                                                <span class="glyphicon glyphicon-trash"></span>Delete
-                                            </button>
-                                        </p>
-                                    </li>
-
-                                </ul>
-                                <!--<div class="panel-footer">Footer</div>-->
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                    <ul class="list-group" style="color:black;">
-                        <li style="text-align:left;" class="list-group-item" ng-repeat="bookmark in RootFolder.bookMarks">{{bookmark.name}} -<a target="_blank" href="{{bookmark.value}}"> {{bookmark.url}}</a>
-                            <p>
-
-                                <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;" ng-click="EditBookmark('/editBookMark/'+RootFolder._id+'/'+$index+'/'+false)">
-                                    <span class="glyphicon glyphicon-paste"></span> Edit
-                                </button>
-                                <button type="button" class="btn btn-default btn-sm" style="float:right;margin-top: -22px;" ng-really-message="Are you sure? you wanna delete this?" ng-really-click="DeleteRootFolderBookMark(RootFolder._id,$index)">
-                                    <span class="glyphicon glyphicon-trash"></span>Delete
-                                </button>
-                            </p>
-                        </li>
-
-                    </ul>
-                </div>
-                <div class="col-lg-6 col-md-6" ng-show="!doNotDisplayApp && (UserFolders.length==0)">
-                    <h1>Start Bookmarking <span class="glyphicon glyphicon-arrow-right"</span></h1>
-                    <img src="img/60720-OAL64W-677.jpg" style="width:400px;height:400px;">
-                </div>
-                <div class="col-lg-6 col-md-6" ng-view ng-cloak>
+                <div class="col-lg-12 col-md-12" ng-view ng-cloak>
 
 
 
