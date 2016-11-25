@@ -28,6 +28,7 @@ bookMArkApp.run(['$rootScope', 'booksfactory', 'envService', '$location', '$loca
         }, function (error) {
 
         });
+        $location.path('/');
     } else {
         $rootScope.doNotDisplayApp = true;
         $location.path('/NoName')
