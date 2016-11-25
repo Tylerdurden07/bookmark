@@ -72,15 +72,23 @@
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header page-scroll">
 
-                <a class="navbar-brand" >TagIt <span class="glyphicon glyphicon-tags"></span></a>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                  <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+              </button>  <a class="navbar-brand" >TagIt <span class="glyphicon glyphicon-tags"></span></a>
             </div>
 
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <!--<a ng-show="userName.length>0">Welcome {{userName}}</a>-->
                 <ul class="nav navbar-nav navbar-right">
 
+                  
                     <li class="page-scroll">
-                        <a ng-show="userName.length>0">Welcome {{userName}}</a>
+                        <a href="#portfolio">My BookMarks</a>
                     </li>
+                    <li class="page-scroll">
+                        <a href="#about">Add BookMark</a>
+                    </li>
+
 
                 </ul>
             </div>
