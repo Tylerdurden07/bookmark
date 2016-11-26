@@ -1,0 +1,4 @@
+
+//CONSTANTS
+var ngToasterTimeOut = 2000;
+var ROOTFOLDERSIGN = 'ROOTFOLDER#';
