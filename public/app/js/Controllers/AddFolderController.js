@@ -30,7 +30,7 @@ bookMArkApp.controller('AddFolderController', ['$rootScope', '$scope', '$locatio
                 } else {
                     $localStorage.recentCreatedFolder = newFolder.id;
 
-                    $location.path(path);
+                    $location.path('/addBookMark');
                 }
             }, function (error) {
 

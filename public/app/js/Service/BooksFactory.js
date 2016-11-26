@@ -10,7 +10,7 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
     var _getUserBookMarks = function (userName) {
 
         var status_deferred = $q.defer();
-        var requestUrl = RESTApiBaseUrl + '/GetFolders';
+        var requestUrl = RESTApiBaseUrl + '/Folders';
 
         $http.get(requestUrl, {
             params: {
@@ -52,7 +52,7 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
     var _saveUserFolderCreation = function (folderObj) {
         var status_deferred = $q.defer();
         // post this folderObj to mongoDb
-        var postUrl = RESTApiBaseUrl + '/PostFolder';
+        var postUrl = RESTApiBaseUrl + '/Folder';
         var postObj = {
             folder: folderObj
         };
@@ -76,11 +76,9 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
     var _deleteFolder = function (folderIndex, folderId) {
         var status_deferred = $q.defer();
         // post this folderObj to mongoDb
-        var postUrl = RESTApiBaseUrl + '/DeleteFolder';
-        var postObj = {
-            folderId: folderId
-        };
-        $http.post(postUrl, postObj)
+        var postUrl = RESTApiBaseUrl + '/Folder';
+
+        $http.delete(postUrl, { params:{folderId: folderId}})
             .success(function (successFolder) {
                 console.log(successFolder);
 
@@ -99,14 +97,14 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
 
         var status_deferred = $q.defer();
         // post this folderObj to mongoDb
-        var postUrl = RESTApiBaseUrl + '/UpdateFolderBookMark';
+        var postUrl = RESTApiBaseUrl + '/FolderBookMark';
         var postObj = {
             folderUpdate: {
                 folderId: folderId,
                 newBookMark: newBookMarkObject
             }
         };
-        $http.post(postUrl, postObj)
+        $http.put(postUrl, postObj)
             .success(function (successFolder) {
                 console.log("folder update success" + successFolder);
                 Enumerable.From($rootScope.UserFolders)
@@ -126,14 +124,14 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
 
         var status_deferred = $q.defer();
         // post this folderObj to mongoDb
-        var postUrl = RESTApiBaseUrl + '/EditFolder';
+        var postUrl = RESTApiBaseUrl + '/Folder';
         var postObj = {
             folderUpdate: {
                 folderId: folderId,
                 folderName: folderName
             }
         };
-        $http.post(postUrl, postObj)
+        $http.put(postUrl, postObj)
             .success(function (successFolder) {
                 console.log("folder update success" + successFolder);
                 Enumerable.From($rootScope.UserFolders)
@@ -153,14 +151,9 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
     var _deleteBookMark = function (folderId, bookMarkId) {
 
         var status_deferred = $q.defer();
-        var postUrl = RESTApiBaseUrl + '/DeleteBookMarkFromFolder';
-        var postObj = {
-            folderUpdate: {
-                folderId: folderId,
-                bookMarkId: bookMarkId
-            }
-        };
-        $http.post(postUrl, postObj)
+        var postUrl = RESTApiBaseUrl + '/FolderBookMark';
+
+        $http.delete(postUrl, { params:{ folderUpdate: { folderId: folderId,  bookMarkId: bookMarkId} }})
             .success(function (successFolder) {
                 console.log("bookmark deleted success" + successFolder);
 
