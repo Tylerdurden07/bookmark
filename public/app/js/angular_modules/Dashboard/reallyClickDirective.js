@@ -1,5 +1,6 @@
-// used for the confirmation box before deletion
-bookMArkApp.directive('ngReallyClick', [function () {
+angular.module("bookMarkDashboard")
+// confirmation box before invoking ng click
+.directive('ngReallyClick', [function () {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {

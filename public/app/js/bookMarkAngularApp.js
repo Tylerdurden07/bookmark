@@ -14,23 +14,17 @@ var ngToasterTimeOut = 2000;
 var ROOTFOLDERSIGN = 'ROOTFOLDER#';
 
 //Angular App
-var bookMArkApp = angular.module('bookmark', ['ngRoute', 'ngStorage', 'environment', 'ngToast', 'ngAnimate']);
+var bookMArkApp = angular.module('bookmark', ['BookMarkRoutes','environmentModule','sharedFactory','addBookMark'
+,'addFolder','bookMarkDashboard','editBookMark','editFolder']);
 
 //Get the master data in Run method and share the data across controller , this reduces number of hits to mongoDb
-bookMArkApp.run(['$rootScope', 'booksfactory', 'envService', '$location', '$localStorage', function ($rootScope, booksfactory, envService, $location, $localStorage) {
+bookMArkApp.run(['$rootScope' , '$location', '$localStorage', function ($rootScope, $location, $localStorage) {
     $localStorage.$reset();
 
     if (userName) {
         $rootScope.userName=userName;
-        booksfactory.GetUserBookMarks(userName).then(function () {
-            $rootScope.$broadcast('init');
-
-        }, function (error) {
-
-        });
         $location.path('/');
     } else {
-        $rootScope.doNotDisplayApp = true;
         $location.path('/NoName')
     }
 

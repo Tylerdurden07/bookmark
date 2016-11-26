@@ -1,4 +1,5 @@
-bookMArkApp.controller('AddFolderController', ['$rootScope', '$scope', '$location', '$routeParams', '$localStorage', 'booksfactory', 'helperFactory', function ($rootScope, $scope, $location, $routeParams, $localStorage, booksfactory, helperFactory) {
+angular.module("addFolder")
+.controller('AddFolderController', ['$scope', '$location', '$routeParams', '$localStorage', 'bookMarkFactory', 'helperFactory', function ($scope, $location, $routeParams, $localStorage, bookMarkFactory, helperFactory) {
 
     //empty folder object
     var emptyFolder = {
@@ -16,7 +17,7 @@ bookMArkApp.controller('AddFolderController', ['$rootScope', '$scope', '$locatio
             var newFolder = clone(emptyFolder);
             newFolder.name = $scope.newFolderName;
             newFolder.userName = userName;
-            booksfactory.SaveUserFolderCreation(newFolder).then(function () {
+            bookMarkFactory.SaveUserFolderCreation(newFolder).then(function () {
                 helperFactory.Toaster('Created Successfully!', 'success');
 
                 // redirect based on the source where the event triggered.
@@ -30,7 +31,7 @@ bookMArkApp.controller('AddFolderController', ['$rootScope', '$scope', '$locatio
                 } else {
                     $localStorage.recentCreatedFolder = newFolder.id;
 
-                    $location.path(path);
+                    $location.path('/addBookMark');
                 }
             }, function (error) {
 

@@ -1,37 +1,40 @@
-bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootScope', '$route', 'booksfactory', 'helperFactory', '$localStorage', function ($scope, $location, $rootScope, $route, booksfactory, helperFactory, $localStorage) {
+angular.module("addBookMark")
+.controller('AddBookMarkController', ['$scope', '$location', '$route', 'bookMarkFactory', 'helperFactory', '$localStorage', function ($scope, $location, $route, bookMarkFactory, helperFactory, $localStorage) {
 
     // incase contoller executes befor angular run.
-    var unbindHandler = $rootScope.$on('init', function () {
-        init();
-        unbindHandler();
-    });
 
     function init() {
         // populate folder drop down if any
-        var availableFolderOptions = Enumerable.From($rootScope.UserFolders).Where(function (x) {
-            return x.name != ROOTFOLDERSIGN
-        }).ToArray();
+        bookMarkFactory.GetUserBookMarks(userName).then(function(folders){
+          $scope.UserFolders =folders;
 
-        if (availableFolderOptions.length > 0) {
-            $scope.disableFolderDropDown = false;
 
-            $scope.availableFolder = $rootScope.availableFolder;
-            $scope.newBookMarkFolder = Enumerable.From(availableFolderOptions).FirstOrDefault()._id;
-            $scope.renderFolderSelect = true;
-        }
+          var availableFolderOptions = Enumerable.From($scope.UserFolders).Where(function (x) {
+              return x.name != ROOTFOLDERSIGN
+          }).ToArray();
+          if (availableFolderOptions.length > 0) {
+              $scope.disableFolderDropDown = false;
+              $scope.newBookMarkFolder = Enumerable.From(availableFolderOptions).FirstOrDefault()._id;
+              $scope.renderFolderSelect = true;
+          }
+          var resetRequired = false;
+          if ($localStorage.dirtyBmName != undefined) {
+              $scope.newBookMarkName = $localStorage.dirtyBmName;
+              resetRequired = true;
+          }
+          if ($localStorage.dirtyBmUrl != undefined) {
+              $scope.newBookMarkUrl = $localStorage.dirtyBmUrl;
+              resetRequired = true;
+          }
+          if (resetRequired) {
+              $localStorage.$reset();
+          }
 
-        var resetRequired = false;
-        if ($localStorage.dirtyBmName != undefined) {
-            $scope.newBookMarkName = $localStorage.dirtyBmName;
-            resetRequired = true;
-        }
-        if ($localStorage.dirtyBmUrl != undefined) {
-            $scope.newBookMarkUrl = $localStorage.dirtyBmUrl;
-            resetRequired = true;
-        }
-        if (resetRequired) {
-            $localStorage.$reset();
-        }
+
+        },function(error){
+
+        });
+
     }
 
     //disable the folder selection if there is no folder created by the user
@@ -71,7 +74,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
             // save this book mark under specific folder if choosen
             if (!includeInfolder) {
                 // check for the rootfolder
-                var _rootItems = Enumerable.From($rootScope.UserFolders)
+                var _rootItems = Enumerable.From($scope.UserFolders)
                     .Where(function (x) {
                         return x.name == ROOTFOLDERSIGN
                     })
@@ -81,11 +84,11 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
                     includeUnderFolderId = _rootItems._id;
 
 
-                    booksfactory.UpdateFolderBookMarks(includeUnderFolderId, newBookMarkObj)
+                    bookMarkFactory.UpdateFolderBookMarks(includeUnderFolderId, newBookMarkObj)
                         .then(function (updatedFolder) {
                             helperFactory.Toaster('Created Successfully!', 'success');
                             $location.path(path);
-                            $route.reload();
+                            //$route.reload();
                         }, function (error) {
 
                         });
@@ -97,7 +100,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
                         userName: userName
                     };
                     newRootFolder.bookMarks.push(newBookMarkObj);
-                    booksfactory.SaveUserFolderCreation(newRootFolder).then(
+                    bookMarkFactory.SaveUserFolderCreation(newRootFolder).then(
                         function () {
                             helperFactory.Toaster('Created Successfully!', 'success');
                             $location.path(path);
@@ -112,7 +115,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$rootSc
             } else {
                 // case where bookmarks are being added to existing folders
 
-                booksfactory.UpdateFolderBookMarks(includeUnderFolderId, newBookMarkObj)
+                bookMarkFactory.UpdateFolderBookMarks(includeUnderFolderId, newBookMarkObj)
                     .then(function (updatedFolder) {
                         helperFactory.Toaster('Created Successfully!', 'success');
                         $location.path(path);

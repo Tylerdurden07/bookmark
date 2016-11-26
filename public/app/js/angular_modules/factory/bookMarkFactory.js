@@ -1,16 +1,19 @@
+angular.module("sharedFactory")
 //this factory interacts with the node rest api for all folder CRUD operations
-bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'envService', function ($http, $q, $timeout, $rootScope, envService) {
+.factory('bookMarkFactory', ['$http', '$q', '$timeout', '$rootScope', 'envService', function ($http, $q, $timeout, $rootScope, envService) {
 
     var RESTApiBaseUrl = envService.read('RESTApiUrl');
     var booksFactory = {};
     $rootScope.UserFolders = [];
     $rootScope.availableFolder = [];
     $rootScope.RootFolder = {};
+    var UserFolders=[];
+    var doneGettingFromDB=false;
 
     var _getUserBookMarks = function (userName) {
 
         var status_deferred = $q.defer();
-        var requestUrl = RESTApiBaseUrl + '/GetFolders';
+        var requestUrl = RESTApiBaseUrl + '/Folders';
 
         $http.get(requestUrl, {
             params: {
@@ -18,26 +21,7 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
             }
         }).
         success(function (data, status, headers, config) {
-            $rootScope.UserFolders = data;
-
-            $rootScope.RootFolder = Enumerable.From($rootScope.UserFolders).Where(function (x) {
-                return x.name == ROOTFOLDERSIGN
-            }).FirstOrDefault();
-            if ($rootScope.RootFolder == undefined) {
-                $rootScope.RootFolder = {};
-            }
-            if ($rootScope.UserFolders.length > 0) {
-                $rootScope.availableFolder = Enumerable.From($rootScope.UserFolders)
-                    .Select(function (x) {
-                        return {
-                            'folderName': x['name'],
-                            'id': x['_id']
-                        };
-                    })
-                    .ToArray();
-            }
-
-            status_deferred.resolve();
+            status_deferred.resolve(data);
         }).error(function (errdata, status, header, config) {
             //requestData call failed, pass additional data with the reject call if needed
             status_deferred.reject(errdata);
@@ -52,16 +36,14 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
     var _saveUserFolderCreation = function (folderObj) {
         var status_deferred = $q.defer();
         // post this folderObj to mongoDb
-        var postUrl = RESTApiBaseUrl + '/PostFolder';
+        var postUrl = RESTApiBaseUrl + '/Folder';
         var postObj = {
             folder: folderObj
         };
         $http.post(postUrl, postObj)
             .success(function (successFolder) {
                 console.log(successFolder);
-                $rootScope.UserFolders.push(successFolder);
-                UpdateRootFolder();
-                updateAvailableFolders();
+                UserFolders.push(successFolder);
                 status_deferred.resolve();
             }).error(function (errdata, status, header, config) {
                 console.log("error saving folder");
@@ -76,17 +58,13 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
     var _deleteFolder = function (folderIndex, folderId) {
         var status_deferred = $q.defer();
         // post this folderObj to mongoDb
-        var postUrl = RESTApiBaseUrl + '/DeleteFolder';
-        var postObj = {
-            folderId: folderId
-        };
-        $http.post(postUrl, postObj)
+        var postUrl = RESTApiBaseUrl + '/Folder';
+
+        $http.delete(postUrl, { params:{folderId: folderId}})
             .success(function (successFolder) {
+              UserFolders.splice(UserFolders.indexOfRootFolder(folderId),1);
                 console.log(successFolder);
 
-
-                $rootScope.UserFolders.splice(folderIndex, 1);
-                updateAvailableFolders();
                 status_deferred.resolve(successFolder);
             }).error(function (errdata, status, header, config) {
                 console.log("error deleting folder");
@@ -99,21 +77,20 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
 
         var status_deferred = $q.defer();
         // post this folderObj to mongoDb
-        var postUrl = RESTApiBaseUrl + '/UpdateFolderBookMark';
+        var postUrl = RESTApiBaseUrl + '/FolderBookMark';
         var postObj = {
             folderUpdate: {
                 folderId: folderId,
                 newBookMark: newBookMarkObject
             }
         };
-        $http.post(postUrl, postObj)
+        $http.put(postUrl, postObj)
             .success(function (successFolder) {
                 console.log("folder update success" + successFolder);
-                Enumerable.From($rootScope.UserFolders)
+                Enumerable.From(UserFolders)
                     .Where(function (x) {
                         return x._id == successFolder._id
                     }).FirstOrDefault().bookMarks = successFolder.bookMarks;
-                UpdateRootFolder();
                 status_deferred.resolve(successFolder);
             }).error(function (errdata, status, header, config) {
                 console.log("error deleting folder");
@@ -126,21 +103,20 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
 
         var status_deferred = $q.defer();
         // post this folderObj to mongoDb
-        var postUrl = RESTApiBaseUrl + '/EditFolder';
+        var postUrl = RESTApiBaseUrl + '/Folder';
         var postObj = {
             folderUpdate: {
                 folderId: folderId,
                 folderName: folderName
             }
         };
-        $http.post(postUrl, postObj)
+        $http.put(postUrl, postObj)
             .success(function (successFolder) {
                 console.log("folder update success" + successFolder);
-                Enumerable.From($rootScope.UserFolders)
+                Enumerable.From(UserFolders)
                     .Where(function (x) {
                         return x._id == successFolder._id
                     }).FirstOrDefault().name = successFolder.name;
-                updateAvailableFolders();
 
                 status_deferred.resolve(successFolder);
             }).error(function (errdata, status, header, config) {
@@ -153,17 +129,15 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
     var _deleteBookMark = function (folderId, bookMarkId) {
 
         var status_deferred = $q.defer();
-        var postUrl = RESTApiBaseUrl + '/DeleteBookMarkFromFolder';
-        var postObj = {
-            folderUpdate: {
-                folderId: folderId,
-                bookMarkId: bookMarkId
-            }
-        };
-        $http.post(postUrl, postObj)
-            .success(function (successFolder) {
-                console.log("bookmark deleted success" + successFolder);
+        var postUrl = RESTApiBaseUrl + '/FolderBookMark';
 
+        $http.delete(postUrl, { params:{ folderUpdate: { folderId: folderId,  bookMarkId: bookMarkId} }})
+            .success(function (successFolder) {
+          var thisFolderBookMark=  Enumerable.From(UserFolders)
+                            .Where(function(x) { return x._id==folderId})
+                            .FirstOrDefault().bookMarks;
+                            thisFolderBookMark.splice(thisFolderBookMark.indexOfRootFolder(bookMarkId),1 );
+                console.log("bookmark deleted success" + successFolder);
                 status_deferred.resolve(successFolder);
             }).error(function (errdata, status, header, config) {
                 console.log("error deleting bookmark");
@@ -172,37 +146,32 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
         return status_deferred.promise;
     }
 
-    function updateAvailableFolders() {
-        if ($rootScope.UserFolders.length > 0) {
-            $rootScope.availableFolder = Enumerable.From($rootScope.UserFolders)
-                .Select(function (x) {
-                    return {
-                        'folderName': x['name'],
-                        'id': x['_id']
-                    };
-                })
-                .ToArray();
-        }
-    }
+    var _getFolders=function(userName){
+        var status_deferred = $q.defer();
+      if(!doneGettingFromDB){
+        _getUserBookMarks(userName).then(
+          function(folders){
+            UserFolders=folders
+            doneGettingFromDB=true;
+            status_deferred.resolve(UserFolders);
+          },function(error){
+            status_deferred.reject(errdata);
+          }
+        )
 
-    function UpdateRootFolder() {
-        $rootScope.RootFolder = Enumerable.From($rootScope.UserFolders).Where(function (x) {
-            return x.name == ROOTFOLDERSIGN
-        }).FirstOrDefault();
-        if ($rootScope.RootFolder == undefined) {
-            $rootScope.RootFolder = {};
-        }
+      } else {
+        status_deferred.resolve(UserFolders);
+      }
+      return status_deferred.promise;
     }
 
 
 
-    booksFactory.GetUserBookMarks = _getUserBookMarks
+    booksFactory.GetUserBookMarks = _getFolders;
     booksFactory.SaveUserFolderCreation = _saveUserFolderCreation;
     booksFactory.DeleteFolder = _deleteFolder;
     booksFactory.UpdateFolderBookMarks = _updateFolderBookMarks;
     booksFactory.DeleteBookMark = _deleteBookMark;
-    booksFactory.UpdateRootFolder = UpdateRootFolder;
-    booksFactory.updateAvailableFolders = updateAvailableFolders;
     booksFactory.UpdateFolderName = _updateFolderName;
 
 

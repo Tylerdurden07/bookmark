@@ -1,5 +1,5 @@
-// App environment Config to maintain diff RESTApi base url
-bookMArkApp.config(function (envServiceProvider) {
+angular.module("environmentModule", [ 'environment'])
+.config(function (envServiceProvider) {
 
     envServiceProvider.config({
         domains: {
@@ -7,7 +7,7 @@ bookMArkApp.config(function (envServiceProvider) {
         },
         vars: {
             development: {
-                RESTApiUrl: 'http://localhost:8080'
+                RESTApiUrl: 'http://localhost:8080/api'
                 //RESTApiUrl: 'https://desolate-taiga-92639.herokuapp.com'
             }
         }

@@ -1,7 +1,13 @@
-bookMArkApp.config(['$routeProvider',
+angular.module("BookMarkRoutes", ['ngRoute'])
+.config(['$routeProvider',
       function ($routeProvider) {
 
         $routeProvider.when('/', {
+
+            templateUrl: 'app/partialViews/MyBookMarks.html',
+            controller: 'MyBookmarkController'
+
+        }).when('/addBookMark', {
 
             templateUrl: 'app/partialViews/AddBookMark.html',
             controller: 'AddBookMarkController'
