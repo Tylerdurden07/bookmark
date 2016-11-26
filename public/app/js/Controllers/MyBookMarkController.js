@@ -2,107 +2,125 @@ bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootSco
 
 
     // extract root folder bookmarks
-    $scope.rootfolderItems = $rootScope.RootFolder;
-    if ($scope.rootfolderItems.length) {
-        $rootScope.rootFolderId = $scope.rootfolderItems.id;
-    }
+    booksfactory.GetUserBookMarks(userName).then(function(folders){
+      $scope.UserFolders =folders;
+      $scope.doNotDisplayApp=true;
+      if($scope.UserFolders.length>0){
+      $scope.doNotDisplayApp=false;
+      }
+      $scope.RootFolder=Enumerable.From(folders).Where(function(x) { return x.name==ROOTFOLDERSIGN}).FirstOrDefault();
 
 
-    $scope.EditFolder = function (editFolderpath) {
+      $scope.EditFolder = function (editFolderpath) {
 
-        $location.path(editFolderpath);
-    }
+          $location.path(editFolderpath);
+      }
 
-    $scope.EditBookmark = function (editBookMarkPath) {
-        $location.path(editBookMarkPath);
-    }
+      $scope.EditBookmark = function (editBookMarkPath) {
+          $location.path(editBookMarkPath);
+      }
 
-    $scope.DeleteFolder = function (folderIndex, folderId) {
+      $scope.DeleteFolder = function (folderIndex, folderId) {
 
-        // delete this folder in mongoDb
-        booksfactory.DeleteFolder(folderIndex, folderId)
-            .then(function (deletedFolder) {
-                helperFactory.Toaster(deletedFolder.name + ' Folder deleted Successfuly!', 'success');
+          // delete this folder in mongoDb
+          booksfactory.DeleteFolder(folderIndex, folderId)
+              .then(function (deletedFolder) {
+                  helperFactory.Toaster(deletedFolder.name + ' Folder deleted Successfuly!', 'success');
 
-                $location.path('/');
-                $route.reload();
-            }, function (error) {
+                  $route.reload();
+                  //$route.reload();
+              }, function (error) {
 
-            });
-
-
-    }
-
-    $scope.DeleteBookMark = function (folderIndex, BookmarkIndex) {
-        var folderId = $rootScope.UserFolders[folderIndex]._id;
-        var bookMarkId = $rootScope.UserFolders[folderIndex]
-            .bookMarks[BookmarkIndex]._id;
-
-        booksfactory.DeleteBookMark(folderId, bookMarkId)
-            .then(function (successFolder) {
-
-                var bmName = $rootScope.UserFolders[folderIndex].bookMarks[BookmarkIndex].name;
-                helperFactory.Toaster(bmName + ' BookMark deleted Successfully!', 'success');
-
-                $rootScope.UserFolders[folderIndex].bookMarks.splice(BookmarkIndex, 1);
-
-                $location.path('/');
-
-            }, function (error) {
-
-            });
+              });
 
 
-    }
+      }
 
-    $scope.DeleteRootFolderBookMark = function (folderId, bookmarkIndex) {
+      $scope.DeleteBookMark = function (folderIndex, BookmarkIndex) {
+          var folderId = $scope.UserFolders[folderIndex]._id;
+          var bookMarkId = $scope.UserFolders[folderIndex]
+              .bookMarks[BookmarkIndex]._id;
+          var bookMarkName=$scope.UserFolders[folderIndex]
+              .bookMarks[BookmarkIndex].name;
 
-        var bookMarkId = Enumerable.From($rootScope.UserFolders)
-            .Where(function (x) {
-                return x._id == folderId
-            })
-            .FirstOrDefault().bookMarks[bookmarkIndex]._id;
+          booksfactory.DeleteBookMark(folderId, bookMarkId)
+              .then(function (successFolder) {
+                  helperFactory.Toaster(bookMarkName + ' BookMark deleted Successfully!', 'success');
 
-        booksfactory.DeleteBookMark(folderId, bookMarkId)
-            .then(function (sucFolder) {
+                  $scope.UserFolders[folderIndex].bookMarks.splice(BookmarkIndex, 1);
 
-                var bmName = Enumerable.From($rootScope.UserFolders)
-                    .Where(function (x) {
-                        return x._id == folderId
-                    })
-                    .FirstOrDefault().bookMarks[bookmarkIndex].name;
-                helperFactory.Toaster(bmName + ' BookMark deleted Successfully!', 'success');
+                  $route.reload();
 
+              }, function (error) {
 
-
-                Enumerable.From($rootScope.UserFolders)
-                    .Where(function (x) {
-                        return x._id == sucFolder._id
-                    }).FirstOrDefault().bookMarks = sucFolder.bookMarks;
-                booksfactory.UpdateRootFolder();
-                // check if the folder is ROOT and it has 0 bookmarks
-                if (sucFolder.name == ROOTFOLDERSIGN && sucFolder.bookMarks.length == 0) {
-                    // issue a delete folder request fo this ROOT folder
-                    var _folderIndex = $rootScope.UserFolders.indexOfRootFolder(sucFolder._id);
-
-                    booksfactory.DeleteFolder(_folderIndex, sucFolder._id).then(
-                        function (deletionSuccess) {
-
-                        },
-                        function (error) {
-
-                        });
-                }
+              });
 
 
-            }, function (error) {
+      }
 
-            });
+      $scope.DeleteRootFolderBookMark = function (folderId, bookmarkIndex) {
 
-    }
+          var bookMarkId = Enumerable.From($scope.UserFolders)
+              .Where(function (x) {
+                  return x._id == folderId
+              })
+              .FirstOrDefault().bookMarks[bookmarkIndex]._id;
+          var BmName=Enumerable.From($scope.UserFolders)
+              .Where(function (x) {
+                  return x._id == folderId
+              })
+              .FirstOrDefault().bookMarks[bookmarkIndex].name;
+
+          booksfactory.DeleteBookMark(folderId, bookMarkId)
+              .then(function (sucFolder) {
+
+                /*  var bmName = Enumerable.From($scope.UserFolders)
+                      .Where(function (x) {
+                          return x._id == folderId
+                      })
+                      .FirstOrDefault().bookMarks[bookmarkIndex].name;*/
+                  helperFactory.Toaster(BmName + ' BookMark deleted Successfully!', 'success');
 
 
 
+                  Enumerable.From($scope.UserFolders)
+                      .Where(function (x) {
+                          return x._id == sucFolder._id
+                      }).FirstOrDefault().bookMarks = sucFolder.bookMarks;
+                  //booksfactory.UpdateRootFolder();
+                  //$scope.RootFolder=Enumerable.From($scope.UserFolders).Where(function(x) { return x.name==ROOTFOLDERSIGN}).FirstOrDefault();
+                  // check if the folder is ROOT and it has 0 bookmarks
+                  if (sucFolder.name == ROOTFOLDERSIGN && sucFolder.bookMarks.length == 0) {
+                      // issue a delete folder request fo this ROOT folder
+                      var _folderIndex = $scope.UserFolders.indexOfRootFolder(sucFolder._id);
+
+                      booksfactory.DeleteFolder(_folderIndex, sucFolder._id).then(
+                          function (deletionSuccess) {
+
+                            $scope.UserFolders.splice(_folderIndex,1);
+                            if($scope.UserFolders.length==0){
+                            $route.reload();
+                            }
+
+                          },
+                          function (error) {
+
+                          });
+                  }
+                  $route.reload();
+
+
+              }, function (error) {
+
+              });
+
+      }
+
+
+
+    },function(error){
+
+    });
 
 
 

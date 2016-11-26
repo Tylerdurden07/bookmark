@@ -6,6 +6,8 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
     $rootScope.UserFolders = [];
     $rootScope.availableFolder = [];
     $rootScope.RootFolder = {};
+    var UserFolders=[];
+    var doneGettingFromDB=false;
 
     var _getUserBookMarks = function (userName) {
 
@@ -18,26 +20,7 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
             }
         }).
         success(function (data, status, headers, config) {
-            $rootScope.UserFolders = data;
-
-            $rootScope.RootFolder = Enumerable.From($rootScope.UserFolders).Where(function (x) {
-                return x.name == ROOTFOLDERSIGN
-            }).FirstOrDefault();
-            if ($rootScope.RootFolder == undefined) {
-                $rootScope.RootFolder = {};
-            }
-            if ($rootScope.UserFolders.length > 0) {
-                $rootScope.availableFolder = Enumerable.From($rootScope.UserFolders)
-                    .Select(function (x) {
-                        return {
-                            'folderName': x['name'],
-                            'id': x['_id']
-                        };
-                    })
-                    .ToArray();
-            }
-
-            status_deferred.resolve();
+            status_deferred.resolve(data);
         }).error(function (errdata, status, header, config) {
             //requestData call failed, pass additional data with the reject call if needed
             status_deferred.reject(errdata);
@@ -59,9 +42,7 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
         $http.post(postUrl, postObj)
             .success(function (successFolder) {
                 console.log(successFolder);
-                $rootScope.UserFolders.push(successFolder);
-                UpdateRootFolder();
-                updateAvailableFolders();
+                UserFolders.push(successFolder);
                 status_deferred.resolve();
             }).error(function (errdata, status, header, config) {
                 console.log("error saving folder");
@@ -80,11 +61,9 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
 
         $http.delete(postUrl, { params:{folderId: folderId}})
             .success(function (successFolder) {
+              UserFolders.splice(UserFolders.indexOfRootFolder(folderId),1);
                 console.log(successFolder);
 
-
-                $rootScope.UserFolders.splice(folderIndex, 1);
-                updateAvailableFolders();
                 status_deferred.resolve(successFolder);
             }).error(function (errdata, status, header, config) {
                 console.log("error deleting folder");
@@ -107,11 +86,10 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
         $http.put(postUrl, postObj)
             .success(function (successFolder) {
                 console.log("folder update success" + successFolder);
-                Enumerable.From($rootScope.UserFolders)
+                Enumerable.From(UserFolders)
                     .Where(function (x) {
                         return x._id == successFolder._id
                     }).FirstOrDefault().bookMarks = successFolder.bookMarks;
-                UpdateRootFolder();
                 status_deferred.resolve(successFolder);
             }).error(function (errdata, status, header, config) {
                 console.log("error deleting folder");
@@ -134,11 +112,10 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
         $http.put(postUrl, postObj)
             .success(function (successFolder) {
                 console.log("folder update success" + successFolder);
-                Enumerable.From($rootScope.UserFolders)
+                Enumerable.From(UserFolders)
                     .Where(function (x) {
                         return x._id == successFolder._id
                     }).FirstOrDefault().name = successFolder.name;
-                updateAvailableFolders();
 
                 status_deferred.resolve(successFolder);
             }).error(function (errdata, status, header, config) {
@@ -155,8 +132,11 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
 
         $http.delete(postUrl, { params:{ folderUpdate: { folderId: folderId,  bookMarkId: bookMarkId} }})
             .success(function (successFolder) {
+          var thisFolderBookMark=  Enumerable.From(UserFolders)
+                            .Where(function(x) { return x._id==folderId})
+                            .FirstOrDefault().bookMarks;
+                            thisFolderBookMark.splice(thisFolderBookMark.indexOfRootFolder(bookMarkId),1 );
                 console.log("bookmark deleted success" + successFolder);
-
                 status_deferred.resolve(successFolder);
             }).error(function (errdata, status, header, config) {
                 console.log("error deleting bookmark");
@@ -165,37 +145,32 @@ bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'e
         return status_deferred.promise;
     }
 
-    function updateAvailableFolders() {
-        if ($rootScope.UserFolders.length > 0) {
-            $rootScope.availableFolder = Enumerable.From($rootScope.UserFolders)
-                .Select(function (x) {
-                    return {
-                        'folderName': x['name'],
-                        'id': x['_id']
-                    };
-                })
-                .ToArray();
-        }
-    }
+    var _getFolders=function(userName){
+        var status_deferred = $q.defer();
+      if(!doneGettingFromDB){
+        _getUserBookMarks(userName).then(
+          function(folders){
+            UserFolders=folders
+            doneGettingFromDB=true;
+            status_deferred.resolve(UserFolders);
+          },function(error){
+            status_deferred.reject(errdata);
+          }
+        )
 
-    function UpdateRootFolder() {
-        $rootScope.RootFolder = Enumerable.From($rootScope.UserFolders).Where(function (x) {
-            return x.name == ROOTFOLDERSIGN
-        }).FirstOrDefault();
-        if ($rootScope.RootFolder == undefined) {
-            $rootScope.RootFolder = {};
-        }
+      } else {
+        status_deferred.resolve(UserFolders);
+      }
+      return status_deferred.promise;
     }
 
 
 
-    booksFactory.GetUserBookMarks = _getUserBookMarks
+    booksFactory.GetUserBookMarks = _getFolders;
     booksFactory.SaveUserFolderCreation = _saveUserFolderCreation;
     booksFactory.DeleteFolder = _deleteFolder;
     booksFactory.UpdateFolderBookMarks = _updateFolderBookMarks;
     booksFactory.DeleteBookMark = _deleteBookMark;
-    booksFactory.UpdateRootFolder = UpdateRootFolder;
-    booksFactory.updateAvailableFolders = updateAvailableFolders;
     booksFactory.UpdateFolderName = _updateFolderName;
 
 

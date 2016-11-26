@@ -1,4 +1,4 @@
-<div class="col-lg-12 col-md-12" ng-show="!doNotDisplayApp && UserFolders.length" ng-controller="MyBookmarkController" >
+<div class="col-lg-12 col-md-12" ng-show="!doNotDisplayApp && UserFolders.length>0" ng-controller="MyBookmarkController" >
     <h1>My BookMarks</h1>
     <div class="panel-group" ng-repeat="folder in UserFolders" ng-hide="folder.name=='ROOTFOLDER#'">
         <div class="panel panel-default" style="text-align: left;">
@@ -40,7 +40,7 @@
 
 
 
-    <ul class="list-group" style="color:black;">
+    <ul class="list-group" style="color:black;" >
         <li style="text-align:left;" class="list-group-item" ng-repeat="bookmark in RootFolder.bookMarks">{{bookmark.name}} -<a target="_blank" href="{{bookmark.value}}"> {{bookmark.url}}</a>
             <p>
 
@@ -55,7 +55,7 @@
 
     </ul>
 </div>
-<div class="col-lg-12 col-md-12" ng-show="!doNotDisplayApp && (UserFolders.length==0)">
+<div class="col-lg-12 col-md-12" ng-show="doNotDisplayApp && (UserFolders.length==0)">
     <h1>Start Bookmarking <span class="glyphicon glyphicon-arrow-right"</span></h1>
     <img src="img/60720-OAL64W-677.jpg" style="width:400px;height:400px;">
 </div>

@@ -1,4 +1,4 @@
-bookMArkApp.controller('AddFolderController', ['$rootScope', '$scope', '$location', '$routeParams', '$localStorage', 'booksfactory', 'helperFactory', function ($rootScope, $scope, $location, $routeParams, $localStorage, booksfactory, helperFactory) {
+bookMArkApp.controller('AddFolderController', ['$scope', '$location', '$routeParams', '$localStorage', 'booksfactory', 'helperFactory', function ($scope, $location, $routeParams, $localStorage, booksfactory, helperFactory) {
 
     //empty folder object
     var emptyFolder = {

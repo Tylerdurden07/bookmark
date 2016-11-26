@@ -22,15 +22,8 @@ bookMArkApp.run(['$rootScope', 'booksfactory', 'envService', '$location', '$loca
 
     if (userName) {
         $rootScope.userName=userName;
-        booksfactory.GetUserBookMarks(userName).then(function () {
-            $rootScope.$broadcast('init');
-
-        }, function (error) {
-
-        });
         $location.path('/');
     } else {
-        $rootScope.doNotDisplayApp = true;
         $location.path('/NoName')
     }
 

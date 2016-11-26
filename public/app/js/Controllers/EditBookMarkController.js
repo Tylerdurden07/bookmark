@@ -1,35 +1,46 @@
-bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootScope', '$routeParams', '$localStorage', 'booksfactory', 'helperFactory', function ($scope, $location, $rootScope, $routeParams, $localStorage, booksfactory, helperFactory) {
-
-    $scope.EditableBmFolderName = Enumerable.From($rootScope.UserFolders)
-        .Where(function (x) {
-            return x._id == $routeParams.folderid
-        })
-        .FirstOrDefault();
-
-    $scope.editBookMarkName = $scope.EditableBmFolderName.bookMarks[$routeParams.bookMarkIndex].name;
-    $scope.editBookMarkUrl = $scope.EditableBmFolderName.bookMarks[$routeParams.bookMarkIndex].url;
-    $scope.editIncludeinFolder = ($routeParams.includeInFolder === 'true');
-    $scope.availableFolder = Enumerable.From($rootScope.UserFolders)
-        .Where(function (x) {
-            return x.name != ROOTFOLDERSIGN
-        })
-        .ToArray();
+bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$routeParams', '$localStorage', 'booksfactory', 'helperFactory', function ($scope, $location,  $routeParams, $localStorage, booksfactory, helperFactory) {
 
 
-
-    if (!$scope.editIncludeinFolder) {
-        // assign default folder
-
-        if ($scope.availableFolder != undefined && $scope.availableFolder.length > 0) {
-            $scope.editBookMarkFolder = Enumerable.From($scope.availableFolder).FirstOrDefault()._id;
-        } else {
-            $scope.disableFolderDropDown = true;
-        }
+    booksfactory.GetUserBookMarks(userName).then(function(folders){
+      $scope.UserFolders =folders;
 
 
-    } else {
-        $scope.editBookMarkFolder = $scope.EditableBmFolderName._id;
-    }
+      $scope.EditableBmFolderName = Enumerable.From($scope.UserFolders)
+          .Where(function (x) {
+              return x._id == $routeParams.folderid
+          })
+          .FirstOrDefault();
+
+      $scope.editBookMarkName = $scope.EditableBmFolderName.bookMarks[$routeParams.bookMarkIndex].name;
+      $scope.editBookMarkUrl = $scope.EditableBmFolderName.bookMarks[$routeParams.bookMarkIndex].url;
+      $scope.editIncludeinFolder = ($routeParams.includeInFolder === 'true');
+      $scope.availableFolder = Enumerable.From($scope.UserFolders)
+          .Where(function (x) {
+              return x.name != ROOTFOLDERSIGN
+          })
+          .ToArray();
+
+
+
+      if (!$scope.editIncludeinFolder) {
+          // assign default folder
+
+          if ($scope.availableFolder != undefined && $scope.availableFolder.length > 0) {
+              $scope.editBookMarkFolder = Enumerable.From($scope.availableFolder).FirstOrDefault()._id;
+          } else {
+              $scope.disableFolderDropDown = true;
+          }
+
+
+      } else {
+          $scope.editBookMarkFolder = $scope.EditableBmFolderName._id;
+      }
+
+
+    },function(error){
+
+    });
+
 
 
     $scope.editBookMark = function (redirectPath, isValid) {
@@ -43,9 +54,10 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
                     destinationFolderId = $scope.editBookMarkFolder;
                 } else {
                     // check root folder exist if not create under new root folder
-                    var rootFolderKeys = Object.keys($rootScope.RootFolder);
-                    if (rootFolderKeys.length) {
-                        destinationFolderId = $rootScope.RootFolder._id;
+                  var RootFolder=  Enumerable.From($scope.UserFolders)
+                    .Where(function(x) { return x.name==ROOTFOLDERSIGN}).FirstOrDefault();
+                    if (RootFolder!=undefined && Object.keys(RootFolder).length>0) {
+                        destinationFolderId = RootFolder._id;
                     } else {
                         // create under newly created root folder
                         insertInRoot = true;
@@ -58,7 +70,7 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
                 $localStorage.$reset();
             }
             // First Delete this book mark from old folder
-            var bookMarkId = Enumerable.From($rootScope.UserFolders)
+            var bookMarkId = Enumerable.From(  $scope.UserFolders)
                 .Where(function (x) {
                     return x._id == $routeParams.folderid
                 })
@@ -67,7 +79,7 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
                 .then(function () {
 
 
-                    Enumerable.From($rootScope.UserFolders)
+                    Enumerable.From($scope.UserFolders)
                         .Where(function (x) {
                             return x._id == $routeParams.folderid
                         })
@@ -75,7 +87,7 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
 
 
                     // for root folder deletion incase if it has 0 bookmarks
-                    var rootFldr = Enumerable.From($rootScope.UserFolders).Where(function (x) {
+                    var rootFldr = Enumerable.From($scope.UserFolders).Where(function (x) {
                             return x.name == ROOTFOLDERSIGN
                         })
                         .FirstOrDefault();
@@ -120,7 +132,7 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
                     if (rootFldr != undefined && Object.keys(rootFldr).length) {
                         if (rootFldr._id == $routeParams.folderid && rootFldr.bookMarks.length == 0) {
                             // delete root folder
-                            var rootFoldrIndex = $rootScope.UserFolders.indexOfRootFolder($routeParams.folderid);
+                            var rootFoldrIndex =   $scope.UserFolders.indexOfRootFolder($routeParams.folderid);
                             booksfactory.DeleteFolder(rootFoldrIndex, $routeParams.folderid)
                                 .then(function () {
                                   if (!$scope.editIncludeinFolder) {
