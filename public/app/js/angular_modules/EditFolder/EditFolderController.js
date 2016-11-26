@@ -1,5 +1,6 @@
-bookMArkApp.controller('EditFolderController', ['$scope', '$location', '$routeParams', 'booksfactory', 'helperFactory', function ($scope, $location,  $routeParams, booksfactory, helperFactory) {
-    booksfactory.GetUserBookMarks(userName).then(function(folders){
+angular.module("editFolder")
+.controller('EditFolderController', ['$scope', '$location', '$routeParams', 'bookMarkFactory', 'helperFactory', function ($scope, $location,  $routeParams, bookMarkFactory, helperFactory) {
+    bookMarkFactory.GetUserBookMarks(userName).then(function(folders){
       $scope.UserFolders =folders;
       var editableFolder = Enumerable.From($scope.UserFolders)
           .Where(function (x) {
@@ -12,7 +13,7 @@ bookMArkApp.controller('EditFolderController', ['$scope', '$location', '$routePa
 
       $scope.editFolder = function (redirectPath, isValid) {
           if (isValid) {
-              booksfactory.UpdateFolderName(folderId, $scope.FolderNameToEdit).then(function () {
+              bookMarkFactory.UpdateFolderName(folderId, $scope.FolderNameToEdit).then(function () {
                   helperFactory.Toaster('Edited Successfully!', 'success');
 
                   $location.path(redirectPath);

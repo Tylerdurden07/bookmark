@@ -1,6 +1,6 @@
+angular.module("sharedFactory")
 // helper methods that can be shared between controllers
-
-bookMArkApp.factory('helperFactory', ['ngToast', function (ngToast) {
+.factory('helperFactory', ['ngToast', function (ngToast) {
 
     var helperFactory = {};
 

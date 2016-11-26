@@ -1,8 +1,9 @@
-bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootScope', '$route', 'booksfactory', 'helperFactory', function ($scope, $location, $rootScope, $route, booksfactory, helperFactory) {
+angular.module("bookMarkDashboard")
+   .controller('MyBookmarkController', ['$scope', '$location', '$route', 'bookMarkFactory', 'helperFactory', function ($scope, $location, $route, bookMarkFactory, helperFactory) {
 
 
     // extract root folder bookmarks
-    booksfactory.GetUserBookMarks(userName).then(function(folders){
+    bookMarkFactory.GetUserBookMarks(userName).then(function(folders){
       $scope.UserFolders =folders;
       $scope.doNotDisplayApp=true;
       if($scope.UserFolders.length>0){
@@ -23,7 +24,7 @@ bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootSco
       $scope.DeleteFolder = function (folderIndex, folderId) {
 
           // delete this folder in mongoDb
-          booksfactory.DeleteFolder(folderIndex, folderId)
+          bookMarkFactory.DeleteFolder(folderIndex, folderId)
               .then(function (deletedFolder) {
                   helperFactory.Toaster(deletedFolder.name + ' Folder deleted Successfuly!', 'success');
 
@@ -43,7 +44,7 @@ bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootSco
           var bookMarkName=$scope.UserFolders[folderIndex]
               .bookMarks[BookmarkIndex].name;
 
-          booksfactory.DeleteBookMark(folderId, bookMarkId)
+          bookMarkFactory.DeleteBookMark(folderId, bookMarkId)
               .then(function (successFolder) {
                   helperFactory.Toaster(bookMarkName + ' BookMark deleted Successfully!', 'success');
 
@@ -71,7 +72,7 @@ bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootSco
               })
               .FirstOrDefault().bookMarks[bookmarkIndex].name;
 
-          booksfactory.DeleteBookMark(folderId, bookMarkId)
+          bookMarkFactory.DeleteBookMark(folderId, bookMarkId)
               .then(function (sucFolder) {
 
                 /*  var bmName = Enumerable.From($scope.UserFolders)
@@ -87,14 +88,14 @@ bookMArkApp.controller('MyBookmarkController', ['$scope', '$location', '$rootSco
                       .Where(function (x) {
                           return x._id == sucFolder._id
                       }).FirstOrDefault().bookMarks = sucFolder.bookMarks;
-                  //booksfactory.UpdateRootFolder();
+
                   //$scope.RootFolder=Enumerable.From($scope.UserFolders).Where(function(x) { return x.name==ROOTFOLDERSIGN}).FirstOrDefault();
                   // check if the folder is ROOT and it has 0 bookmarks
                   if (sucFolder.name == ROOTFOLDERSIGN && sucFolder.bookMarks.length == 0) {
                       // issue a delete folder request fo this ROOT folder
                       var _folderIndex = $scope.UserFolders.indexOfRootFolder(sucFolder._id);
 
-                      booksfactory.DeleteFolder(_folderIndex, sucFolder._id).then(
+                      bookMarkFactory.DeleteFolder(_folderIndex, sucFolder._id).then(
                           function (deletionSuccess) {
 
                             $scope.UserFolders.splice(_folderIndex,1);

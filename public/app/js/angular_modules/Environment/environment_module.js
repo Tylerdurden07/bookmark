@@ -1,5 +1,5 @@
-// App environment Config to maintain diff RESTApi base url
-bookMArkApp.config(function (envServiceProvider) {
+angular.module("environmentModule", [ 'environment'])
+.config(function (envServiceProvider) {
 
     envServiceProvider.config({
         domains: {

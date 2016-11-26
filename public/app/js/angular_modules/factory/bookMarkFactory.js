@@ -1,5 +1,6 @@
+angular.module("sharedFactory")
 //this factory interacts with the node rest api for all folder CRUD operations
-bookMArkApp.factory('booksfactory', ['$http', '$q', '$timeout', '$rootScope', 'envService', function ($http, $q, $timeout, $rootScope, envService) {
+.factory('bookMarkFactory', ['$http', '$q', '$timeout', '$rootScope', 'envService', function ($http, $q, $timeout, $rootScope, envService) {
 
     var RESTApiBaseUrl = envService.read('RESTApiUrl');
     var booksFactory = {};

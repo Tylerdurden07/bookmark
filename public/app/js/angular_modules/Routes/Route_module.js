@@ -1,4 +1,5 @@
-bookMArkApp.config(['$routeProvider',
+angular.module("BookMarkRoutes", ['ngRoute'])
+.config(['$routeProvider',
       function ($routeProvider) {
 
         $routeProvider.when('/', {

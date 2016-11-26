@@ -1,7 +1,8 @@
-bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$routeParams', '$localStorage', 'booksfactory', 'helperFactory', function ($scope, $location,  $routeParams, $localStorage, booksfactory, helperFactory) {
+angular.module("editBookMark")
+.controller('EditBookMarkController', ['$scope', '$location', '$routeParams', '$localStorage', 'bookMarkFactory', 'helperFactory', function ($scope, $location,  $routeParams, $localStorage, bookMarkFactory, helperFactory) {
 
 
-    booksfactory.GetUserBookMarks(userName).then(function(folders){
+    bookMarkFactory.GetUserBookMarks(userName).then(function(folders){
       $scope.UserFolders =folders;
 
 
@@ -75,7 +76,7 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$route
                     return x._id == $routeParams.folderid
                 })
                 .FirstOrDefault().bookMarks[$routeParams.bookMarkIndex]._id;
-            booksfactory.DeleteBookMark($routeParams.folderid, bookMarkId)
+            bookMarkFactory.DeleteBookMark($routeParams.folderid, bookMarkId)
                 .then(function () {
 
 
@@ -105,7 +106,7 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$route
                                   userName: userName
                               };
                               newRootFolder.bookMarks.push(newBookMarkObj);
-                              booksfactory.SaveUserFolderCreation(newRootFolder).then(
+                              bookMarkFactory.SaveUserFolderCreation(newRootFolder).then(
                                   function () {
 
                                       helperFactory.Toaster('Edited Successfully!', 'success');
@@ -118,7 +119,7 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$route
 
                               // do normal bookmark insert into a folder operation
 
-                              booksfactory.UpdateFolderBookMarks(destinationFolderId, newBookMarkObj)
+                              bookMarkFactory.UpdateFolderBookMarks(destinationFolderId, newBookMarkObj)
                                   .then(function (updatedFolder) {
                                       helperFactory.Toaster('Edited Successfully!', 'success');
 
@@ -133,7 +134,7 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$route
                         if (rootFldr._id == $routeParams.folderid && rootFldr.bookMarks.length == 0) {
                             // delete root folder
                             var rootFoldrIndex =   $scope.UserFolders.indexOfRootFolder($routeParams.folderid);
-                            booksfactory.DeleteFolder(rootFoldrIndex, $routeParams.folderid)
+                            bookMarkFactory.DeleteFolder(rootFoldrIndex, $routeParams.folderid)
                                 .then(function () {
                                   if (!$scope.editIncludeinFolder) {
                                   insertInRoot=true;

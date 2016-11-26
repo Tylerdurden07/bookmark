@@ -1,10 +1,11 @@
-bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$route', 'booksfactory', 'helperFactory', '$localStorage', function ($scope, $location, $route, booksfactory, helperFactory, $localStorage) {
+angular.module("addBookMark")
+.controller('AddBookMarkController', ['$scope', '$location', '$route', 'bookMarkFactory', 'helperFactory', '$localStorage', function ($scope, $location, $route, bookMarkFactory, helperFactory, $localStorage) {
 
     // incase contoller executes befor angular run.
 
     function init() {
         // populate folder drop down if any
-        booksfactory.GetUserBookMarks(userName).then(function(folders){
+        bookMarkFactory.GetUserBookMarks(userName).then(function(folders){
           $scope.UserFolders =folders;
 
 
@@ -83,7 +84,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$route'
                     includeUnderFolderId = _rootItems._id;
 
 
-                    booksfactory.UpdateFolderBookMarks(includeUnderFolderId, newBookMarkObj)
+                    bookMarkFactory.UpdateFolderBookMarks(includeUnderFolderId, newBookMarkObj)
                         .then(function (updatedFolder) {
                             helperFactory.Toaster('Created Successfully!', 'success');
                             $location.path(path);
@@ -99,7 +100,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$route'
                         userName: userName
                     };
                     newRootFolder.bookMarks.push(newBookMarkObj);
-                    booksfactory.SaveUserFolderCreation(newRootFolder).then(
+                    bookMarkFactory.SaveUserFolderCreation(newRootFolder).then(
                         function () {
                             helperFactory.Toaster('Created Successfully!', 'success');
                             $location.path(path);
@@ -114,7 +115,7 @@ bookMArkApp.controller('AddBookMarkController', ['$scope', '$location', '$route'
             } else {
                 // case where bookmarks are being added to existing folders
 
-                booksfactory.UpdateFolderBookMarks(includeUnderFolderId, newBookMarkObj)
+                bookMarkFactory.UpdateFolderBookMarks(includeUnderFolderId, newBookMarkObj)
                     .then(function (updatedFolder) {
                         helperFactory.Toaster('Created Successfully!', 'success');
                         $location.path(path);

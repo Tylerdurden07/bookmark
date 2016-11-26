@@ -1,4 +1,5 @@
-bookMArkApp.filter('removeSpaces', [function () {
+angular.module("bookMarkDashboard")
+.filter('removeSpaces', [function () {
     return function (string) {
         if (!angular.isString(string)) {
             return string;
