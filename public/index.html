@@ -47,7 +47,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/ngstorage/0.3.6/ngStorage.min.js"></script>
     <script src="vendor/angular/angular-environment.js"></script>
     <!--angular code js -->
-
+    <script src="app/js/constants.js"></script>
+    <script src="app/js/javascriptHelper.js"></script>
     <script src="app/js/angular_modules/Environment/environment_module.js"></script>
 
     <script src="app/js/angular_modules/factory/sharedFactories.js"></script>
@@ -92,11 +93,14 @@
                 <ul class="nav navbar-nav navbar-right">
 
 
-                    <li class="page-scroll">
+                    <li class="page-scroll" ng-if="userName.length>0">
                         <a href="#/">My BookMarks</a>
                     </li>
-                    <li class="page-scroll">
+                    <li class="page-scroll" ng-if="userName.length>0">
                         <a href="#/addBookMark">Add BookMark</a>
+                    </li>
+                    <li class="page-scroll" ng-if="userName.length>0">
+                        <a> Welcome {{userName}}</a>
                     </li>
 
 
