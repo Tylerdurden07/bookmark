@@ -1,6 +1,4 @@
 var express = require("express");
-var mongoose = require('mongoose');
-var path = require("path");
 var bodyParser = require("body-parser");
 var NODE_PORT=process.env.PORT || 8080;
 var app = express();

@@ -123,7 +123,9 @@ bookMArkApp.controller('EditBookMarkController', ['$scope', '$location', '$rootS
                             var rootFoldrIndex = $rootScope.UserFolders.indexOfRootFolder($routeParams.folderid);
                             booksfactory.DeleteFolder(rootFoldrIndex, $routeParams.folderid)
                                 .then(function () {
+                                  if (!$scope.editIncludeinFolder) {
                                   insertInRoot=true;
+                                }
                                   InsertInDesiredFolder();
 
                                 }, function () {
