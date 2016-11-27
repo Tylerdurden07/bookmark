@@ -7,8 +7,8 @@ angular.module("environmentModule", [ 'environment'])
         },
         vars: {
             development: {
-                RESTApiUrl: 'http://localhost:8080/api'
-                //RESTApiUrl: 'https://desolate-taiga-92639.herokuapp.com'
+                //RESTApiUrl: 'http://localhost:8080/api'
+                RESTApiUrl: 'https://desolate-taiga-92639.herokuapp.com/api'
             }
         }
     });

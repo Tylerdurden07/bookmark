@@ -47,9 +47,6 @@ angular.module("bookMarkDashboard")
           bookMarkFactory.DeleteBookMark(folderId, bookMarkId)
               .then(function (successFolder) {
                   helperFactory.Toaster(bookMarkName + ' BookMark deleted Successfully!', 'success');
-
-                  $scope.UserFolders[folderIndex].bookMarks.splice(BookmarkIndex, 1);
-
                   $route.reload();
 
               }, function (error) {

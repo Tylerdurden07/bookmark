@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-//Including the routes module
+//Including the routes module which is modularized ( Routes , DAL, Validation Templates , Controller ) under NodeApp Folder
 var routes = require("./NodeApp/APIRoutes");
 routes(app);
 
