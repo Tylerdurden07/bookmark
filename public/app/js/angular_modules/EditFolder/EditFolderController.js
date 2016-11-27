@@ -21,7 +21,7 @@ angular.module("editFolder")
 
               });
           } else {
-              helperFactory.Toaster('Can not edit!! Special characters not allowed', 'danger');
+              helperFactory.Toaster('Can not edit!! Empty String and Special characters not allowed', 'danger');
           }
 
       }

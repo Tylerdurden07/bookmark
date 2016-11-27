@@ -78,7 +78,7 @@ angular.module("addBookMark")
                     .Where(function (x) {
                         return x.name == ROOTFOLDERSIGN
                     })
-                    .ToArray();
+                    .FirstOrDefault();
                 if (_rootItems != undefined && Object.keys(_rootItems).length > 0) {
                     //root folder already exists
                     includeUnderFolderId = _rootItems._id;
