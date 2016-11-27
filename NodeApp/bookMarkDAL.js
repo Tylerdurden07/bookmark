@@ -40,7 +40,6 @@ module.exports.saveFolder=function(requestBody,callback){
   //save it
   folderObj.save(function (err, folder) {
       if (err) throw err;
-      console.log('saved successfully:', folder);
       callback(JSON.stringify(folder));
 
   });
@@ -49,11 +48,9 @@ module.exports.saveFolder=function(requestBody,callback){
 
 module.exports.deleteFolder=function(requestBody,callback){
   var folderId = requestBody.folderId;
-console.log("deleting folderid : "+folderId);
   Folder.findByIdAndRemove(folderId, function (err, folder) {
       if (err) throw err;
       else {
-      console.log("deleted folder.." + folder);
       callback(folder);
     }
 
@@ -63,7 +60,6 @@ console.log("deleting folderid : "+folderId);
 
 module.exports.updateFolderBookMark=function(requestBody,callback){
   var folderUpdateObj = requestBody.folderUpdate;
-console.log("DAL"+JSON.stringify(folderUpdateObj));
   Folder.findByIdAndUpdate(folderUpdateObj.folderId, {
       $push: {
           'bookMarks': folderUpdateObj.newBookMark

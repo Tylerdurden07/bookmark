@@ -38,10 +38,9 @@ var putFolderTemplate={
         return (String.length>0 && /^[a-zA-Z0-9 ]*$/.test(String))
       }
   }
+
 }
-
 return putFolderTemplate;
-
 }
 
 
@@ -55,7 +54,7 @@ module.exports.deleteFolderBookMarkPredicate=function(request){
 
 module.exports.deleteFolderPredicate=function(request){
  var inErrorState=(request.query.folderId==undefined||request.query.folderId.length<20);
- returm inErrorState;
+ return inErrorState;
 }
 
 module.exports.getFoldersPredicate=function(request){
