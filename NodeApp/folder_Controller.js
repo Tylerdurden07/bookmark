@@ -1,4 +1,4 @@
-var folderDAL=require('./bookMarkDAL');
+var folderDAL=require('./bookmarkdal');
 
 module.exports.getFolders = function(userName, callback){
   console.log("getting folder collection of a user");

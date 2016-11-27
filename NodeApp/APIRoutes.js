@@ -1,5 +1,5 @@
 var folderController = require("./folder_controller");
-var paperWorkTemplate=require("./paperWorkTemplate");
+var paperWorkTemplate=require("./paperworktemplate");
 var paperWork=require('paperwork');
 
 module.exports = function(app){
